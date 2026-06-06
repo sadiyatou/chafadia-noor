@@ -1,0 +1,263 @@
+{
+  "app": {
+    "name": "Chafadia Noor",
+    "tagline": "Lumière pour la Foi, la Connaissance, la Prière et la Communauté",
+    "welcome": "Bienvenue sur Chafadia Noor",
+    "loading": "Chargement...",
+    "retry": "Réessayer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "done": "Terminé",
+    "next": "Suivant",
+    "back": "Retour",
+    "close": "Fermer",
+    "search": "Rechercher",
+    "settings": "Paramètres"
+  },
+
+  "auth": {
+    "login": "Connexion",
+    "register": "Créer un compte",
+    "logout": "Déconnexion",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "fullName": "Nom complet",
+    "phone": "Numéro de téléphone",
+    "forgotPassword": "Mot de passe oublié ?",
+    "resetPassword": "Réinitialiser le mot de passe",
+    "loginSuccess": "Connexion réussie",
+    "registerSuccess": "Compte créé avec succès",
+    "logoutSuccess": "Déconnexion réussie"
+  },
+
+  "navigation": {
+    "home": "Accueil",
+    "quran": "Coran",
+    "prayerTimes": "Heures de prière",
+    "dua": "Invocations",
+    "hadith": "Hadith",
+    "tasbeeh": "Tasbih",
+    "community": "Communauté",
+    "messages": "Messages",
+    "calls": "Appels",
+    "profile": "Profil",
+    "calendar": "Calendrier",
+    "mosques": "Mosquées",
+    "ramadan": "Ramadan",
+    "live": "En direct",
+    "jobs": "Emplois",
+    "courses": "Cours",
+    "notifications": "Notifications"
+  },
+
+  "community": {
+    "title": "Communauté",
+    "createPost": "Créer une publication",
+    "post": "Publication",
+    "posts": "Publications",
+    "announcement": "Annonce",
+    "question": "Question",
+    "event": "Événement",
+    "charity": "Charité",
+    "reminder": "Rappel",
+    "general": "Général",
+    "jobs": "Emplois",
+    "like": "J'aime",
+    "comment": "Commentaire",
+    "share": "Partager",
+    "save": "Enregistrer",
+    "repost": "Repartager",
+    "report": "Signaler",
+    "download": "Télécharger",
+    "followers": "Abonnés",
+    "following": "Abonnements",
+    "friends": "Amis",
+    "views": "Vues",
+    "likes": "Mentions J'aime",
+    "writeComment": "Écrire un commentaire...",
+    "writePost": "À quoi pensez-vous ?",
+    "postCreated": "Publication créée avec succès"
+  },
+
+  "messages": {
+    "title": "Messagerie",
+    "chats": "Discussions",
+    "groups": "Groupes",
+    "updates": "Statuts",
+    "contacts": "Contacts",
+    "newChat": "Nouvelle discussion",
+    "newGroup": "Nouveau groupe",
+    "typeMessage": "Tapez un message...",
+    "send": "Envoyer",
+    "voiceNote": "Message vocal",
+    "photo": "Photo",
+    "video": "Vidéo",
+    "document": "Document",
+    "location": "Localisation",
+    "reply": "Répondre",
+    "forward": "Transférer",
+    "copy": "Copier",
+    "pin": "Épingler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "online": "En ligne",
+    "typing": "Écrit..."
+  },
+
+  "calls": {
+    "title": "Appels",
+    "voiceCall": "Appel vocal",
+    "videoCall": "Appel vidéo",
+    "incomingCall": "Appel entrant",
+    "outgoingCall": "Appel sortant",
+    "missedCall": "Appel manqué",
+    "scheduleCall": "Planifier un appel",
+    "joinCall": "Rejoindre l'appel",
+    "endCall": "Terminer l'appel",
+    "mute": "Couper le micro",
+    "speaker": "Haut-parleur",
+    "camera": "Caméra",
+    "recording": "Enregistrement"
+  },
+
+  "live": {
+    "title": "Diffusions en direct",
+    "goLive": "Démarrer un direct",
+    "liveNow": "En direct maintenant",
+    "joinStream": "Rejoindre le direct",
+    "leaveStream": "Quitter le direct",
+    "viewers": "Spectateurs",
+    "comments": "Commentaires",
+    "shareStream": "Partager le direct"
+  },
+
+  "profile": {
+    "title": "Profil",
+    "editProfile": "Modifier le profil",
+    "profilePicture": "Photo de profil",
+    "changePhoto": "Changer la photo",
+    "removePhoto": "Supprimer la photo",
+    "bio": "Biographie",
+    "location": "Localisation",
+    "country": "Pays",
+    "education": "Éducation",
+    "occupation": "Profession",
+    "totalLikes": "Total des mentions J'aime",
+    "totalVideos": "Total des vidéos",
+    "joined": "Inscrit depuis"
+  },
+
+  "jobs": {
+    "title": "Emplois",
+    "apply": "Postuler",
+    "applications": "Candidatures",
+    "jobTitle": "Titre du poste",
+    "company": "Entreprise",
+    "salary": "Salaire",
+    "location": "Lieu",
+    "remote": "Télétravail",
+    "fullTime": "Temps plein",
+    "partTime": "Temps partiel",
+    "internship": "Stage"
+  },
+
+  "courses": {
+    "title": "Cours",
+    "enroll": "S'inscrire",
+    "continue": "Continuer l'apprentissage",
+    "completed": "Terminé",
+    "lessons": "Leçons",
+    "certificate": "Certificat",
+    "progress": "Progression"
+  },
+
+  "islamic": {
+    "bismillah": "Au nom d'Allah, le Tout Miséricordieux, le Très Miséricordieux",
+    "assalamuAlaikum": "Que la paix soit sur vous",
+    "alhamdulillah": "Louange à Allah",
+    "subhanAllah": "Gloire à Allah",
+    "allahuAkbar": "Allah est le Plus Grand",
+    "jazakAllah": "Qu'Allah vous récompense en bien",
+    "inshaAllah": "Si Allah le veut",
+    "ameen": "Amine",
+    "dailyReminder": "Rappel quotidien",
+    "dua": "Invocation",
+    "quranReminder": "Rappel du Coran",
+    "hadithReminder": "Rappel du Hadith"
+  },
+
+  "prayer": {
+    "title": "Heures de prière",
+    "fajr": "Fajr",
+    "sunrise": "Lever du soleil",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha",
+    "qibla": "Qibla",
+    "adhan": "Adhan",
+    "iqamah": "Iqama",
+    "nextPrayer": "Prochaine prière"
+  },
+
+  "quran": {
+    "title": "Saint Coran",
+    "surah": "Sourate",
+    "ayah": "Verset",
+    "bookmark": "Favori",
+    "recitation": "Récitation",
+    "translation": "Traduction",
+    "tafsir": "Tafsir",
+    "lastRead": "Dernière lecture"
+  },
+
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Tout marquer comme lu",
+    "clearAll": "Tout effacer",
+    "newMessage": "Nouveau message",
+    "newFollower": "Nouvel abonné",
+    "newLike": "Nouveau J'aime",
+    "newComment": "Nouveau commentaire",
+    "newCall": "Nouvel appel",
+    "prayerReminder": "Rappel de prière",
+    "eventReminder": "Rappel d'événement"
+  },
+
+  "settings": {
+    "title": "Paramètres",
+    "language": "Langue",
+    "darkMode": "Mode sombre",
+    "lightMode": "Mode clair",
+    "notifications": "Notifications",
+    "privacy": "Confidentialité",
+    "security": "Sécurité",
+    "theme": "Thème",
+    "about": "À propos",
+    "help": "Aide",
+    "support": "Support",
+    "deleteAccount": "Supprimer le compte"
+  },
+
+  "errors": {
+    "somethingWentWrong": "Une erreur s'est produite. Veuillez réessayer.",
+    "networkError": "Erreur réseau.",
+    "requiredField": "Ce champ est obligatoire.",
+    "invalidEmail": "Adresse e-mail invalide.",
+    "weakPassword": "Mot de passe trop faible.",
+    "permissionDenied": "Permission refusée.",
+    "notFound": "Données introuvables."
+  },
+
+  "success": {
+    "saved": "Enregistré avec succès",
+    "updated": "Mis à jour avec succès",
+    "deleted": "Supprimé avec succès",
+    "sent": "Envoyé avec succès",
+    "uploaded": "Téléchargé avec succès",
+    "downloaded": "Téléchargé avec succès"
+  }
+}

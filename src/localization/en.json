@@ -1,0 +1,263 @@
+{
+  "app": {
+    "name": "Chafadia Noor",
+    "tagline": "Light for Faith, Knowledge, Prayer, and Community",
+    "welcome": "Welcome to Chafadia Noor",
+    "loading": "Loading...",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "done": "Done",
+    "next": "Next",
+    "back": "Back",
+    "close": "Close",
+    "search": "Search",
+    "settings": "Settings"
+  },
+
+  "auth": {
+    "login": "Login",
+    "register": "Create Account",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "fullName": "Full Name",
+    "phone": "Phone Number",
+    "forgotPassword": "Forgot Password?",
+    "resetPassword": "Reset Password",
+    "loginSuccess": "Successfully logged in",
+    "registerSuccess": "Account created successfully",
+    "logoutSuccess": "Successfully logged out"
+  },
+
+  "navigation": {
+    "home": "Home",
+    "quran": "Quran",
+    "prayerTimes": "Prayer Times",
+    "dua": "Duas",
+    "hadith": "Hadith",
+    "tasbeeh": "Tasbeeh",
+    "community": "Community",
+    "messages": "Messages",
+    "calls": "Calls",
+    "profile": "Profile",
+    "calendar": "Calendar",
+    "mosques": "Mosques",
+    "ramadan": "Ramadan",
+    "live": "Live",
+    "jobs": "Jobs",
+    "courses": "Courses",
+    "notifications": "Notifications"
+  },
+
+  "community": {
+    "title": "Community",
+    "createPost": "Create Post",
+    "post": "Post",
+    "posts": "Posts",
+    "announcement": "Announcement",
+    "question": "Question",
+    "event": "Event",
+    "charity": "Charity",
+    "reminder": "Reminder",
+    "general": "General",
+    "jobs": "Jobs",
+    "like": "Like",
+    "comment": "Comment",
+    "share": "Share",
+    "save": "Save",
+    "repost": "Repost",
+    "report": "Report",
+    "download": "Download",
+    "followers": "Followers",
+    "following": "Following",
+    "friends": "Friends",
+    "views": "Views",
+    "likes": "Likes",
+    "writeComment": "Write a comment...",
+    "writePost": "What's on your mind?",
+    "postCreated": "Post created successfully"
+  },
+
+  "messages": {
+    "title": "Messaging",
+    "chats": "Chats",
+    "groups": "Groups",
+    "updates": "Updates",
+    "contacts": "Contacts",
+    "newChat": "New Chat",
+    "newGroup": "New Group",
+    "typeMessage": "Type a message...",
+    "send": "Send",
+    "voiceNote": "Voice Note",
+    "photo": "Photo",
+    "video": "Video",
+    "document": "Document",
+    "location": "Location",
+    "reply": "Reply",
+    "forward": "Forward",
+    "copy": "Copy",
+    "pin": "Pin",
+    "delete": "Delete",
+    "edit": "Edit",
+    "online": "Online",
+    "typing": "Typing..."
+  },
+
+  "calls": {
+    "title": "Calls",
+    "voiceCall": "Voice Call",
+    "videoCall": "Video Call",
+    "incomingCall": "Incoming Call",
+    "outgoingCall": "Outgoing Call",
+    "missedCall": "Missed Call",
+    "scheduleCall": "Schedule Call",
+    "joinCall": "Join Call",
+    "endCall": "End Call",
+    "mute": "Mute",
+    "speaker": "Speaker",
+    "camera": "Camera",
+    "recording": "Recording"
+  },
+
+  "live": {
+    "title": "Live Streams",
+    "goLive": "Go Live",
+    "liveNow": "Live Now",
+    "joinStream": "Join Stream",
+    "leaveStream": "Leave Stream",
+    "viewers": "Viewers",
+    "comments": "Comments",
+    "shareStream": "Share Stream"
+  },
+
+  "profile": {
+    "title": "Profile",
+    "editProfile": "Edit Profile",
+    "profilePicture": "Profile Picture",
+    "changePhoto": "Change Photo",
+    "removePhoto": "Remove Photo",
+    "bio": "Bio",
+    "location": "Location",
+    "country": "Country",
+    "education": "Education",
+    "occupation": "Occupation",
+    "totalLikes": "Total Likes",
+    "totalVideos": "Total Videos",
+    "joined": "Joined"
+  },
+
+  "jobs": {
+    "title": "Jobs",
+    "apply": "Apply",
+    "applications": "Applications",
+    "jobTitle": "Job Title",
+    "company": "Company",
+    "salary": "Salary",
+    "location": "Location",
+    "remote": "Remote",
+    "fullTime": "Full Time",
+    "partTime": "Part Time",
+    "internship": "Internship"
+  },
+
+  "courses": {
+    "title": "Courses",
+    "enroll": "Enroll",
+    "continue": "Continue Learning",
+    "completed": "Completed",
+    "lessons": "Lessons",
+    "certificate": "Certificate",
+    "progress": "Progress"
+  },
+
+  "islamic": {
+    "bismillah": "In the Name of Allah, the Most Merciful, the Most Compassionate",
+    "assalamuAlaikum": "Peace be upon you",
+    "alhamdulillah": "All praise is due to Allah",
+    "subhanAllah": "Glory be to Allah",
+    "allahuAkbar": "Allah is the Greatest",
+    "jazakAllah": "May Allah reward you with goodness",
+    "inshaAllah": "If Allah wills",
+    "ameen": "Ameen",
+    "dailyReminder": "Daily Reminder",
+    "dua": "Dua",
+    "quranReminder": "Quran Reminder",
+    "hadithReminder": "Hadith Reminder"
+  },
+
+  "prayer": {
+    "title": "Prayer Times",
+    "fajr": "Fajr",
+    "sunrise": "Sunrise",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha",
+    "qibla": "Qibla",
+    "adhan": "Adhan",
+    "iqamah": "Iqamah",
+    "nextPrayer": "Next Prayer"
+  },
+
+  "quran": {
+    "title": "Holy Quran",
+    "surah": "Surah",
+    "ayah": "Ayah",
+    "bookmark": "Bookmark",
+    "recitation": "Recitation",
+    "translation": "Translation",
+    "tafsir": "Tafsir",
+    "lastRead": "Last Read"
+  },
+
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark All as Read",
+    "clearAll": "Clear All",
+    "newMessage": "New Message",
+    "newFollower": "New Follower",
+    "newLike": "New Like",
+    "newComment": "New Comment",
+    "newCall": "New Call",
+    "prayerReminder": "Prayer Reminder",
+    "eventReminder": "Event Reminder"
+  },
+
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "notifications": "Notifications",
+    "privacy": "Privacy",
+    "security": "Security",
+    "theme": "Theme",
+    "about": "About",
+    "help": "Help",
+    "support": "Support",
+    "deleteAccount": "Delete Account"
+  },
+
+  "errors": {
+    "somethingWentWrong": "Something went wrong. Please try again.",
+    "networkError": "Network error.",
+    "requiredField": "This field is required.",
+    "invalidEmail": "Invalid email address.",
+    "weakPassword": "Password is too weak.",
+    "permissionDenied": "Permission denied.",
+    "notFound": "Data not found."
+  },
+
+  "success": {
+    "saved": "Saved successfully",
+    "updated": "Updated successfully",
+    "deleted": "Deleted successfully",
+    "sent": "Sent successfully",
+    "uploaded": "Uploaded successfully",
+    "downloaded": "Downloaded successfully"
+  }
+}
