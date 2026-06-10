@@ -100,27 +100,6 @@ const TAFSIR_VIDEO_ASSETS = {
   tafsir3: require('@/src/assets/sounds/Quran_Tafseer_03_27_-_Mufti_Menk(0).mp4'),
   tafsir4: require('@/src/assets/sounds/Quran_Tafseer_04_27_-_Mufti_Menk(0).mp4'),
   tafsir5: require('@/src/assets/sounds/Quran_Tafseer_05_27_-_Mufti_Menk(0).mp4'),
-  tafsir6: require('@/src/assets/sounds/Quran_Tafseer_06_27_-_Mufti_Menk(0).mp4'),
-  tafsir7: require('@/src/assets/sounds/Quran_Tafseer_07_27_-_Mufti_Menk(0).mp4'),
-  tafsir8: require('@/src/assets/sounds/Quran_Tafseer_08_27_-_Mufti_Menk(0).mp4'),
-  tafsir9: require('@/src/assets/sounds/Quran_Tafseer_09_27_-_Mufti_Menk(0).mp4'),
-  tafsir10: require('@/src/assets/sounds/Quran_Tafseer_10_27_-_Mufti_Menk(0).mp4'),
-  tafsir12: require('@/src/assets/sounds/Quran_Tafseer_12_27_-_Mufti_Menk(0).mp4'),
-  tafsir13: require('@/src/assets/sounds/Quran_Tafseer_13_27_-_Mufti_Menk(0).mp4'),
-  tafsir14: require('@/src/assets/sounds/Quran_Tafseer_14_27_-_Mufti_Menk(0).mp4'),
-  tafsir15: require('@/src/assets/sounds/Quran_Tafseer_15_27_-_Mufti_Menk(0).mp4'),
-  tafsir16: require('@/src/assets/sounds/Quran_Tafseer_16_27_-_Mufti_Menk(0).mp4'),
-  tafsir17: require('@/src/assets/sounds/Quran_Tafseer_17_27_-_Mufti_Menk(0).mp4'),
-  tafsir18: require('@/src/assets/sounds/Quran_Tafseer_18_27_-_Mufti_Menk(0).mp4'),
-  tafsir19: require('@/src/assets/sounds/Quran_Tafseer_19_27_-_Mufti_Menk(0).mp4'),
-  tafsir20: require('@/src/assets/sounds/Quran_Tafseer_20_27_-_Mufti_Menk(0).mp4'),
-  tafsir21: require('@/src/assets/sounds/Quran_Tafseer_21_27_-_Mufti_Menk(0).mp4'),
-  tafsir22: require('@/src/assets/sounds/Quran_Tafseer_22_27_-_Mufti_Menk(0).mp4'),
-  tafsir23: require('@/src/assets/sounds/Quran_Tafseer_23_27_-_Mufti_Menk(0).mp4'),
-  tafsir24: require('@/src/assets/sounds/Quran_Tafseer_24_27_-_Mufti_Menk(0).mp4'),
-  tafsir25: require('@/src/assets/sounds/Quran_Tafseer_25_27_-_Mufti_Menk(0).mp4'),
-  tafsir26: require('@/src/assets/sounds/Quran_Tafseer_26_27_-_Mufti_Menk(0).mp4'),
-  tafsir27: require('@/src/assets/sounds/Quran_Tafseer_27_27_-_Mufti_Menk(0).mp4'),
 };
 
 const TAFSIR_VIDEO_LESSONS = [
@@ -158,153 +137,6 @@ const TAFSIR_VIDEO_LESSONS = [
     title: 'Tafsir Journey 05',
     subtitle: 'Reflect on Quranic guidance and how it shapes daily life.',
     media: TAFSIR_VIDEO_ASSETS.tafsir5,
-  },
-  {
-    id: 'tafsir-06',
-    episode: 6,
-    title: 'Tafsir Journey 06',
-    subtitle: 'Learn lessons of faith, patience, worship and trust in Allah.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir6,
-  },
-  {
-    id: 'tafsir-07',
-    episode: 7,
-    title: 'Tafsir Journey 07',
-    subtitle: 'Continue the series with clear reminders and spiritual benefit.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir7,
-  },
-  {
-    id: 'tafsir-08',
-    episode: 8,
-    title: 'Tafsir Journey 08',
-    subtitle: 'Understand Quranic messages with humility and reflection.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir8,
-  },
-  {
-    id: 'tafsir-09',
-    episode: 9,
-    title: 'Tafsir Journey 09',
-    subtitle: 'A guided video lesson to strengthen your relationship with the Quran.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir9,
-  },
-  {
-    id: 'tafsir-10',
-    episode: 10,
-    title: 'Tafsir Journey 10',
-    subtitle: 'Explore more meanings and reminders from the Quranic message.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir10,
-  },
-  {
-    id: 'tafsir-12',
-    episode: 12,
-    title: 'Tafsir Journey 12',
-    subtitle: 'A thoughtful lesson for deeper Quran understanding and reflection.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir12,
-  },
-  {
-    id: 'tafsir-13',
-    episode: 13,
-    title: 'Tafsir Journey 13',
-    subtitle: 'Study the Quran with calmness, sincerity and practical benefit.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir13,
-  },
-  {
-    id: 'tafsir-14',
-    episode: 14,
-    title: 'Tafsir Journey 14',
-    subtitle: 'Reflect on Allah’s guidance and strengthen your heart with Quran.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir14,
-  },
-  {
-    id: 'tafsir-15',
-    episode: 15,
-    title: 'Tafsir Journey 15',
-    subtitle: 'A beneficial video lesson for Quran study and spiritual growth.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir15,
-  },
-  {
-    id: 'tafsir-16',
-    episode: 16,
-    title: 'Tafsir Journey 16',
-    subtitle: 'Continue your Tafsir learning path with practical reminders.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir16,
-  },
-  {
-    id: 'tafsir-17',
-    episode: 17,
-    title: 'Tafsir Journey 17',
-    subtitle: 'Learn Quranic lessons that help build faith, patience and sincerity.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir17,
-  },
-  {
-    id: 'tafsir-18',
-    episode: 18,
-    title: 'Tafsir Journey 18',
-    subtitle: 'A reflective session to help you understand and live the Quran.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir18,
-  },
-  {
-    id: 'tafsir-19',
-    episode: 19,
-    title: 'Tafsir Journey 19',
-    subtitle: 'Grow your Quran connection through guided explanation and reflection.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir19,
-  },
-  {
-    id: 'tafsir-20',
-    episode: 20,
-    title: 'Tafsir Journey 20',
-    subtitle: 'A polished Tafsir lesson for learning, reflection and daily application.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir20,
-  },
-  {
-    id: 'tafsir-21',
-    episode: 21,
-    title: 'Tafsir Journey 21',
-    subtitle: 'Continue the Quran Tafsir series with beneficial reminders.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir21,
-  },
-  {
-    id: 'tafsir-22',
-    episode: 22,
-    title: 'Tafsir Journey 22',
-    subtitle: 'A guided lesson to understand Quranic guidance with a soft heart.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir22,
-  },
-  {
-    id: 'tafsir-23',
-    episode: 23,
-    title: 'Tafsir Journey 23',
-    subtitle: 'Reflect on meanings that bring clarity, hope and discipline.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir23,
-  },
-  {
-    id: 'tafsir-24',
-    episode: 24,
-    title: 'Tafsir Journey 24',
-    subtitle: 'Strengthen your Quran study habit through another guided lesson.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir24,
-  },
-  {
-    id: 'tafsir-25',
-    episode: 25,
-    title: 'Tafsir Journey 25',
-    subtitle: 'A meaningful Tafsir session for reflection and spiritual renewal.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir25,
-  },
-  {
-    id: 'tafsir-26',
-    episode: 26,
-    title: 'Tafsir Journey 26',
-    subtitle: 'Continue connecting the Quran to worship, manners and daily life.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir26,
-  },
-  {
-    id: 'tafsir-27',
-    episode: 27,
-    title: 'Tafsir Journey 27',
-    subtitle: 'Complete this Tafsir collection with reflection, gratitude and action.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir27,
   },
 ];
 
@@ -2715,7 +2547,7 @@ export default function QuranScreen() {
   };
 
   const renderTafsir = () => {
-    const filteredTafsirVideos = TAFSIR_VIDEO_LESSONS.filter(video => {
+    const filteredTafsirVideos = TAFSIR_VIDEO_LESSONS.slice(0, 5).filter(video => {
       const q = search.toLowerCase().trim();
 
       if (!q) return true;
@@ -3521,7 +3353,7 @@ export default function QuranScreen() {
             </View>
 
             <View style={styles.homeStatPill}>
-              <Text style={styles.homeStatNumber}>27</Text>
+              <Text style={styles.homeStatNumber}>5</Text>
               <Text style={styles.homeStatLabel}>Tafsir</Text>
             </View>
           </View>
