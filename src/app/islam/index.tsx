@@ -72,8 +72,6 @@ const assets = {
   essential1: require('@/src/assets/images/essentials1.jpeg'),
   ghusl1: require('@/src/assets/images/ghusl-chafadia.jpeg'),
   ghusl2: require('@/src/assets/images/ghusl2-chafadia.jpeg'),
-
-  essential3: require('@/src/assets/sounds/essential3.mp4'),
   essential4: require('@/src/assets/sounds/essential4.mp4'),
   shroud: require('@/src/assets/sounds/shrouding-deceased.mp4'),
 
@@ -599,7 +597,7 @@ const LESSONS: Lesson[] = [
       'It reminds us of the Hereafter.',
     ],
   },
-  
+
   {
     id: 'washing-deceased-essential4',
     title: 'Washing and Shrouding the Deceased: Reminder',
