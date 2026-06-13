@@ -33,18 +33,13 @@ import {
   Eye,
   Sparkles,
   ListChecks,
-  GraduationCap,
   Clock,
   Flame,
   VideoIcon,
-  Home,
-  Users,
   Moon,
   HeartPulse,
   Plane,
-  Baby,
   BadgeCheck,
-  ChevronDown,
 } from 'lucide-react-native';
 
 const { width, height } = Dimensions.get('window');
@@ -78,23 +73,9 @@ const assets = {
   ghusl1: require('@/src/assets/images/ghusl-chafadia.jpeg'),
   ghusl2: require('@/src/assets/images/ghusl2-chafadia.jpeg'),
 
-  death: require('@/src/assets/sounds/7-signs that death is near.mp4'),
-  fajr: require('@/src/assets/sounds/after-fajr.mp4'),
-  marriage: require('@/src/assets/sounds/Arrange-marriage.mp4'),
-  azkar: require('@/src/assets/sounds/azkar.mp4'),
-  patience: require('@/src/assets/sounds/be patient-Allah sees.mp4'),
-  anger: require('@/src/assets/sounds/control-anger.mp4'),
-  beyond: require('@/src/assets/sounds/death-beyond muslim.mp4'),
-  essential2: require('@/src/assets/sounds/essential2.mp4'),
   essential3: require('@/src/assets/sounds/essential3.mp4'),
   essential4: require('@/src/assets/sounds/essential4.mp4'),
-  essential5: require('@/src/assets/sounds/essential5.mp4'),
-  intimacy: require('@/src/assets/sounds/intimacy-marriage.mp4'),
-  grief: require('@/src/assets/sounds/loosing-lovedone.mp4'),
-  moment: require('@/src/assets/sounds/moment-everythingchanges.mp4'),
-  bond: require('@/src/assets/sounds/sacred-bond.mp4'),
   shroud: require('@/src/assets/sounds/shrouding-deceased.mp4'),
-  love: require('@/src/assets/sounds/successfull mariage.mp4'),
 
   // Hajj, Umrah, Adhkar and Women Guides
   tawaf: require('@/src/assets/images/tawaf.png'),
@@ -111,7 +92,7 @@ const assets = {
   hajj: require('@/src/assets/images/hajj-chafadia.jpeg'),
 };
 
-type LessonType = 'image' | 'video' | 'guide';
+type LessonType = 'image' | 'video';
 
 type Lesson = {
   id: string;
@@ -139,36 +120,13 @@ const CATEGORIES = [
   'Hajj & Umrah',
   'Death',
   'Eid',
-  'Character',
   'Daily Life',
-  'Family',
-  'Marriage',
-  'Quran',
   'Videos',
   'Saved',
   'Completed',
 ];
 
-const DAILY_HACKS = [
-  'Start the day with Fajr and morning adhkar.',
-  'Keep wudu as much as possible.',
-  'Pray on time before becoming busy.',
-  'Read at least a few verses of Quran daily.',
-  'Say Bismillah before actions and Alhamdulillah after blessings.',
-  'Give small sadaqah often, even a smile.',
-  'Make istighfar when stressed or after mistakes.',
-  'Sleep with evening adhkar and forgiveness in your heart.',
-];
 
-const LEARNING_PATH = [
-  'Tawheed and the pillars of Islam',
-  'Purification, wudu and ghusl',
-  'How to pray salah correctly',
-  'Daily adhkar and Quran connection',
-  'Fasting, zakat, Hajj, Umrah and Islamic manners',
-  'Family, marriage and emotional strength',
-  'Death, janazah and preparation for the Hereafter',
-];
 
 const LESSONS: Lesson[] = [
   {
@@ -190,83 +148,6 @@ const LESSONS: Lesson[] = [
       'Zakat purifies wealth and helps the needy.',
       'Sawm trains sincerity, patience and taqwa.',
       'Hajj is required once for those who are able.',
-    ],
-  },
-  {
-    id: 'iman',
-    title: '6 Pillars of Iman',
-    category: 'Faith',
-    type: 'guide',
-    icon: '✨',
-    level: 'Essential',
-    duration: '7 min',
-    essential: true,
-    summary:
-      'A Muslim believes in Allah, His angels, His books, His messengers, the Last Day and divine decree.',
-    points: [
-      'Believe in Allah alone without partners.',
-      'Believe in the angels created by Allah.',
-      'Believe in the revealed books.',
-      'Believe in all prophets and messengers.',
-      'Believe in the Day of Judgment.',
-      'Believe in Qadar, the good and difficult parts of destiny.',
-    ],
-  },
-  {
-    id: 'tawheed',
-    title: 'Tawheed: Oneness of Allah',
-    category: 'Faith',
-    type: 'guide',
-    icon: '☝️',
-    level: 'Essential',
-    duration: '8 min',
-    featured: true,
-    essential: true,
-    summary:
-      'Tawheed is the heart of Islam: worship Allah alone and attach the heart to Him.',
-    points: [
-      'Allah alone creates, provides and controls all affairs.',
-      'Only Allah deserves worship, dua, sacrifice and ultimate reliance.',
-      'Avoid shirk in belief, speech and actions.',
-      'Make your intention sincere for Allah.',
-    ],
-  },
-  {
-    id: 'moment-everything-changes',
-    title: 'The Moment Allah Changes Everything',
-    category: 'Faith',
-    type: 'video',
-    media: assets.moment,
-    icon: '🌙',
-    level: 'Reminder',
-    duration: 'Video',
-    featured: true,
-    summary:
-      'A powerful reminder about hope, dua, patience and Allah changing situations at the perfect time.',
-    points: [
-      'Never lose hope in Allah’s mercy.',
-      'A difficult season can become a door to guidance.',
-      'Keep making dua even when answers feel delayed.',
-      'Trust Allah’s timing and wisdom.',
-    ],
-  },
-  {
-    id: 'essential-struggle-pray',
-    title: 'Do You Struggle to Pray?',
-    category: 'Salah',
-    type: 'video',
-    media: assets.essential2,
-    icon: '🕌',
-    level: 'Motivation',
-    duration: 'Video',
-    featured: true,
-    summary:
-      'A practical and spiritual reminder for anyone struggling to stay consistent with salah.',
-    points: [
-      'Start again even if you missed many prayers.',
-      'Do not let guilt push you away from Allah.',
-      'Build prayer consistency step by step.',
-      'Ask Allah to make salah beloved to your heart.',
     ],
   },
   {
@@ -371,8 +252,6 @@ const LESSONS: Lesson[] = [
       'Complete all pillars and obligations.',
     ],
   },
-
-
   {
     id: 'tawaf-step-by-step',
     title: 'Tawaf Step by Step',
@@ -598,7 +477,6 @@ const LESSONS: Lesson[] = [
       'When unsure, seek guidance from a knowledgeable scholar or trusted teacher.',
     ],
   },
-
   {
   id: 'step-by-step-hajj',
   title: 'Step by Step Hajj Guide',
@@ -666,81 +544,6 @@ const LESSONS: Lesson[] = [
   ],
 },
   {
-    id: 'salah-video',
-    title: 'How to Perform Salah Step by Step',
-    category: 'Salah',
-    type: 'video',
-    media: assets.essential5,
-    icon: '▶️',
-    level: 'Practical',
-    duration: 'Video',
-    featured: true,
-    essential: true,
-    summary: 'Video guide for salah from beginning to end.',
-    points: [
-      'Watch carefully and practice slowly.',
-      'Pause and repeat difficult steps.',
-      'Use this as a practical learning guide.',
-      'Repeat until you are confident in the full prayer.',
-    ],
-  },
-  {
-    id: 'after-fajr',
-    title: 'After Fajr: Do These Things',
-    category: 'Daily Life',
-    type: 'video',
-    media: assets.fajr,
-    icon: '🌅',
-    level: 'Daily',
-    duration: 'Video',
-    featured: true,
-    summary:
-      'A practical guide for turning the time after Fajr into a blessed and productive spiritual routine.',
-    points: [
-      'Stay awake after Fajr when possible.',
-      'Read Quran and morning adhkar.',
-      'Make dua before the day becomes busy.',
-      'Plan your day around obedience to Allah.',
-    ],
-  },
-  {
-    id: 'azkar-video',
-    title: 'Morning Adhkar Remembrance',
-    category: 'Daily Life',
-    type: 'video',
-    media: assets.azkar,
-    icon: '🌿',
-    level: 'Daily',
-    duration: 'Video',
-    featured: true,
-    summary:
-      'A reminder about morning adhkar, remembrance and beginning the day under Allah’s protection.',
-    points: [
-      'Morning adhkar protect the heart.',
-      'Begin the day with gratitude and tawheed.',
-      'Make remembrance a daily habit.',
-      'Pair adhkar with Fajr and Quran.',
-    ],
-  },
-  {
-    id: 'khushu',
-    title: 'Khushu in Salah',
-    category: 'Salah',
-    type: 'guide',
-    icon: '🕌',
-    level: 'Spiritual',
-    duration: '6 min',
-    summary:
-      'Khushu means praying with humility, focus and awareness of Allah.',
-    points: [
-      'Remember that you are standing before Allah.',
-      'Understand what you recite.',
-      'Pray slowly and avoid rushing.',
-      'Remove distractions before prayer.',
-      'Make dua sincerely after salah.',
-    ],
-  },
-  {
     id: 'sawm',
     title: 'Fasting in Ramadan',
     category: 'Fasting',
@@ -794,44 +597,6 @@ const LESSONS: Lesson[] = [
       'There are multiple takbirs.',
       'Make dua for the deceased.',
       'It reminds us of the Hereafter.',
-    ],
-  },
-  {
-    id: 'death-near-signs',
-    title: '7 Signs That Death Is Near',
-    category: 'Death',
-    type: 'video',
-    media: assets.death,
-    icon: '⚰️',
-    level: 'Reminder',
-    duration: 'Video',
-    featured: true,
-    summary:
-      'A serious reminder about death, preparation, repentance and returning to Allah before it is too late.',
-    points: [
-      'Remembering death softens the heart.',
-      'Prepare through salah, repentance and good deeds.',
-      'Do not delay fixing your relationship with Allah.',
-      'Use the reminder to improve, not to despair.',
-    ],
-  },
-  {
-    id: 'death-beyond-muslim',
-    title: 'Death and Beyond',
-    category: 'Death',
-    type: 'video',
-    media: assets.beyond,
-    icon: '🕊️',
-    level: 'Akhirah',
-    duration: 'Video',
-    featured: true,
-    summary:
-      'A reminder about what comes after death and why the believer prepares for the meeting with Allah.',
-    points: [
-      'This worldly life is temporary.',
-      'The grave is the first station of the Hereafter.',
-      'Good deeds become a companion after death.',
-      'Remember Allah before the final moment arrives.',
     ],
   },
   {
@@ -890,25 +655,6 @@ const LESSONS: Lesson[] = [
     ],
   },
   {
-    id: 'grief-loved-one',
-    title: 'Losing a Loved One',
-    category: 'Death',
-    type: 'video',
-    media: assets.grief,
-    icon: '🤍',
-    level: 'Emotional Support',
-    duration: 'Video',
-    featured: true,
-    summary:
-      'A comforting reminder for grief, patience and hope after losing someone beloved.',
-    points: [
-      'Grief is real, but Allah is near.',
-      'Make dua for the deceased often.',
-      'Patience does not mean you do not feel pain.',
-      'Hope in Allah’s mercy brings healing to the heart.',
-    ],
-  },
-  {
     id: 'female-deceased',
     title: 'How to Wash a Female Deceased',
     category: 'Death',
@@ -945,25 +691,6 @@ const LESSONS: Lesson[] = [
     ],
   },
   {
-  id: 'struggling-with-salah',
-  title: 'Do You Struggle to Pray?',
-  category: 'Salah',
-  type: 'video',
-  media: assets.essential2,
-  icon: '🕌',
-  level: 'Practical',
-  duration: 'Video',
-  summary:
-    'A motivational Islamic reminder for Muslims struggling with consistency in salah.',
-  points: [
-    'Never give up on salah no matter how many times you fall.',
-    'Salah is your connection with Allah.',
-    'Start slowly and build consistency step by step.',
-    'Even difficult prayers become easier with sincerity and patience.',
-    'Allah loves the servant who returns to Him repeatedly.',
-  ],
-},
-  {
     id: 'decomposition',
     title: 'Decomposition of the Human Body',
     category: 'Death',
@@ -979,155 +706,6 @@ const LESSONS: Lesson[] = [
       'This life is temporary.',
       'Prepare for the meeting with Allah.',
       'Increase repentance, prayer and good deeds.',
-    ],
-  },
-  {
-    id: 'arranged-love-marriage',
-    title: 'Arranged Marriage vs Love Marriage',
-    category: 'Marriage',
-    type: 'video',
-    media: assets.marriage,
-    icon: '💍',
-    level: 'Family',
-    duration: 'Video',
-    featured: true,
-    summary:
-      'An Islamic discussion on arranged marriage, love marriage, family involvement and choosing wisely.',
-    points: [
-      'Marriage should be based on deen, character and compatibility.',
-      'Family involvement can be a blessing when handled with wisdom.',
-      'Love must remain within halal boundaries.',
-      'Seek istikhara, consultation and clarity before marriage.',
-    ],
-  },
-  {
-    id: 'romance-at-home',
-    title: 'Romance at Home',
-    category: 'Marriage',
-    type: 'video',
-    media: assets.intimacy,
-    icon: '🏡',
-    level: 'Marriage',
-    duration: 'Video',
-    summary:
-      'A respectful lesson on affection, mercy and romance within halal marriage.',
-    points: [
-      'Islam values love and mercy between spouses.',
-      'Kind words build emotional safety.',
-      'Romance belongs inside marriage with respect and modesty.',
-      'Small acts of care strengthen the home.',
-    ],
-  },
-  {
-    id: 'sacred-bond-marriage',
-    title: 'The Sacred Bond: Marriage in Islam',
-    category: 'Marriage',
-    type: 'video',
-    media: assets.bond,
-    icon: '🤝',
-    level: 'Marriage',
-    duration: 'Video',
-    featured: true,
-    summary:
-      'A lesson on marriage as a sacred trust, mercy, responsibility and companionship.',
-    points: [
-      'Marriage is a covenant before Allah.',
-      'Both spouses need mercy, patience and respect.',
-      'A strong marriage is built through worship and communication.',
-      'Protect the home from anger, pride and neglect.',
-    ],
-  },
-  {
-    id: 'successful-marriage',
-    title: 'Successful Marriage',
-    category: 'Marriage',
-    type: 'video',
-    media: assets.love,
-    icon: '❤️',
-    level: 'Marriage',
-    duration: 'Video',
-    summary:
-      'Practical Islamic advice for building a successful and peaceful marriage.',
-    points: [
-      'Choose kindness even during disagreement.',
-      'Protect each other’s dignity.',
-      'Make dua together and for each other.',
-      'Do not let small issues become permanent resentment.',
-    ],
-  },
-  {
-    id: 'family-mercy',
-    title: 'Mercy at Home',
-    category: 'Family',
-    type: 'guide',
-    icon: '🏡',
-    level: 'Daily',
-    duration: '5 min',
-    summary:
-      'Islamic home life is built on mercy, respect, patience and remembrance.',
-    points: [
-      'Say salam when entering the home.',
-      'Speak gently with family.',
-      'Forgive small mistakes quickly.',
-      'Make dua for spouse, parents and children.',
-      'Avoid letting anger control your words.',
-    ],
-  },
-  {
-    id: 'anger-control',
-    title: 'How to Control Your Temper',
-    category: 'Character',
-    type: 'video',
-    media: assets.anger,
-    icon: '🧘',
-    level: 'Character',
-    duration: 'Video',
-    featured: true,
-    summary:
-      'A practical Islamic lesson on controlling anger and responding with patience.',
-    points: [
-      'Seek refuge in Allah from Shaytan.',
-      'Stay silent when anger rises.',
-      'Change posture: sit or lie down.',
-      'Make wudu and step away from conflict.',
-      'Strong people control themselves when angry.',
-    ],
-  },
-  {
-    id: 'be-patient',
-    title: 'Be Patient: Allah Sees Your Pain',
-    category: 'Character',
-    type: 'video',
-    media: assets.patience,
-    icon: '🤲',
-    level: 'Emotional Strength',
-    duration: 'Video',
-    featured: true,
-    summary:
-      'A comforting reminder that Allah sees your pain, hears your cry and rewards patience.',
-    points: [
-      'Allah knows what you are carrying.',
-      'Patience is worship when done for Allah.',
-      'Tears with dua are not wasted.',
-      'Relief can arrive in a way you never expected.',
-    ],
-  },
-  {
-    id: 'character',
-    title: 'Good Character in Islam',
-    category: 'Character',
-    type: 'guide',
-    icon: '🤍',
-    level: 'Daily',
-    duration: '6 min',
-    summary:
-      'Islam teaches mercy, honesty, patience, modesty and excellent manners.',
-    points: [
-      'Speak truthfully and gently.',
-      'Keep promises and trusts.',
-      'Respect parents, elders and neighbors.',
-      'Forgive people and avoid arrogance.',
-      'Show mercy to children, animals and the weak.',
     ],
   },
   {
@@ -1165,36 +743,6 @@ const LESSONS: Lesson[] = [
       'Remember Allah abundantly.',
     ],
   },
-  {
-    id: 'quran-daily',
-    title: 'Daily Quran Connection',
-    category: 'Quran',
-    type: 'guide',
-    icon: '📖',
-    level: 'Daily',
-    duration: '5 min',
-    summary:
-      'Build a daily relationship with the Quran, even with a small amount.',
-    points: [
-      'Read a few verses daily with reflection.',
-      'Listen to Quran while resting or travelling.',
-      'Learn meanings slowly.',
-      'Act upon one lesson at a time.',
-      'Make dua that Allah makes the Quran light for your heart.',
-    ],
-  },
-  {
-    id: 'daily-life',
-    title: 'Daily Muslim Lifestyle Hacks',
-    category: 'Daily Life',
-    type: 'guide',
-    icon: '🌿',
-    level: 'Practical',
-    duration: '8 min',
-    summary:
-      'Small Islamic habits can turn an ordinary day into worship.',
-    points: DAILY_HACKS,
-  },
 ];
 
 
@@ -1208,11 +756,7 @@ function categoryIcon(category: string, color: string) {
   if (category === 'Hajj & Umrah') return <Plane size={15} color={color} />;
   if (category === 'Death') return <HeartPulse size={15} color={color} />;
   if (category === 'Eid') return <Star size={15} color={color} />;
-  if (category === 'Character') return <Heart size={15} color={color} />;
   if (category === 'Daily Life') return <ListChecks size={15} color={color} />;
-  if (category === 'Family') return <Home size={15} color={color} />;
-  if (category === 'Marriage') return <Users size={15} color={color} />;
-  if (category === 'Quran') return <BookOpen size={15} color={color} />;
   if (category === 'Videos') return <VideoIcon size={15} color={color} />;
   if (category === 'Saved') return <Heart size={15} color={color} />;
  
@@ -1226,8 +770,6 @@ function getCategoryColors(category: string): GradientColors {
     case 'Death':
       return ['#2F2F2F', '#064E3B'];
 
-    case 'Marriage':
-      return ['#7C2D4C', '#064E3B'];
 
     case 'Salah':
       return ['#064E3B', '#0D7054'];
@@ -1238,8 +780,6 @@ function getCategoryColors(category: string): GradientColors {
     case 'Menstruation':
       return ['#9F2D2D', '#7C2D4C'];
 
-    case 'Character':
-      return ['#7C3AED', '#064E3B'];
 
     case 'Daily Life':
       return ['#0F766E', '#064E3B'];
@@ -1256,11 +796,7 @@ function getCategoryColors(category: string): GradientColors {
     case 'Hajj & Umrah':
       return ['#92400E', '#064E3B'];
 
-    case 'Family':
-      return ['#BE185D', '#064E3B'];
 
-    case 'Quran':
-      return ['#166534', '#065F46'];
 
     case 'Eid':
       return ['#92400E', '#065F46'];
@@ -1280,8 +816,6 @@ export default function IslamicEssentialsPage() {
   const [fullImage, setFullImage] = useState<any>(null);
   const [saved, setSaved] = useState<string[]>([]);
   const [completed, setCompleted] = useState<string[]>([]);
-  const [learningPathOpen, setLearningPathOpen] = useState(false);
-  const [dailyHacksOpen, setDailyHacksOpen] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -1614,86 +1148,9 @@ export default function IslamicEssentialsPage() {
           </View>
         </LinearGradient>
 
-        <View style={styles.pathCard}>
-          <TouchableOpacity
-            activeOpacity={0.85}
-            style={styles.dropdownHeader}
-            onPress={() => setLearningPathOpen(prev => !prev)}
-          >
-            <View style={styles.dailyHeaderCompact}>
-              <View style={styles.sectionIconCircle}>
-                <GraduationCap size={20} color={GOLD} />
-              </View>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.dailyTitle}>Recommended Learning Path</Text>
-                <Text style={styles.dailySubTitle}>Tap to {learningPathOpen ? 'hide' : 'open'} the suggested order</Text>
-              </View>
-            </View>
+        
 
-            <View style={styles.dropdownIconBox}>
-              <ChevronDown
-                size={19}
-                color={GREEN}
-                style={learningPathOpen ? styles.dropdownIconOpen : undefined}
-              />
-            </View>
-          </TouchableOpacity>
-
-          {learningPathOpen && (
-            <View style={styles.dropdownContent}>
-              {LEARNING_PATH.map((item, index) => (
-                <View key={item} style={styles.pathRow}>
-                  <View style={styles.pathLineWrap}>
-                    <View style={styles.pathNumber}>
-                      <Text style={styles.pathNumberText}>{index + 1}</Text>
-                    </View>
-                    {index !== LEARNING_PATH.length - 1 ? <View style={styles.pathLine} /> : null}
-                  </View>
-                  <Text style={styles.pathText}>{item}</Text>
-                </View>
-              ))}
-            </View>
-          )}
-        </View>
-
-        <View style={styles.dailyCard}>
-          <TouchableOpacity
-            activeOpacity={0.85}
-            style={styles.dropdownHeader}
-            onPress={() => setDailyHacksOpen(prev => !prev)}
-          >
-            <View style={styles.dailyHeaderCompact}>
-              <View style={styles.sectionIconCircle}>
-                <ListChecks size={20} color={GOLD} />
-              </View>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.dailyTitle}>Daily Islamic Lifestyle Hacks</Text>
-                <Text style={styles.dailySubTitle}>Tap to {dailyHacksOpen ? 'hide' : 'open'} small habits that keep the heart alive</Text>
-              </View>
-            </View>
-
-            <View style={styles.dropdownIconBox}>
-              <ChevronDown
-                size={19}
-                color={GREEN}
-                style={dailyHacksOpen ? styles.dropdownIconOpen : undefined}
-              />
-            </View>
-          </TouchableOpacity>
-
-          {dailyHacksOpen && (
-            <View style={styles.dropdownContent}>
-              {DAILY_HACKS.map((hack, index) => (
-                <View key={index} style={styles.dailyRow}>
-                  <View style={styles.checkDot}>
-                    <CheckCircle size={14} color="#FFFFFF" />
-                  </View>
-                  <Text style={styles.dailyText}>{hack}</Text>
-                </View>
-              ))}
-            </View>
-          )}
-        </View>
+        
 
         {category === 'All' && (
           <>

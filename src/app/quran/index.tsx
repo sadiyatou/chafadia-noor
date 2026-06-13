@@ -23,7 +23,7 @@ import {
 
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Audio, Video, ResizeMode } from 'expo-av';
+import { Audio } from 'expo-av';
 import * as Notifications from 'expo-notifications';
 
 import {
@@ -94,52 +94,249 @@ const DAYS = [
   { label: 'Sat', value: 7 },
 ];
 
-const TAFSIR_VIDEO_ASSETS = {
-  tafsir1: require('@/src/assets/sounds/Quran_Tafseer_01_27_-_Mufti_Menk(0).mp4'),
-  tafsir2: require('@/src/assets/sounds/Quran_Tafseer_02_27_-_Mufti_Menk(0).mp4'),
-  tafsir3: require('@/src/assets/sounds/Quran_Tafseer_03_27_-_Mufti_Menk(0).mp4'),
-  tafsir4: require('@/src/assets/sounds/Quran_Tafseer_04_27_-_Mufti_Menk(0).mp4'),
-  tafsir5: require('@/src/assets/sounds/Quran_Tafseer_05_27_-_Mufti_Menk(0).mp4'),
-};
-
-const TAFSIR_VIDEO_LESSONS = [
+const IMPORTANT_SURAH_TAFSIR = [
   {
-    id: 'tafsir-01',
-    episode: 1,
-    title: 'Tafsir Journey 01',
-    subtitle: 'Begin the Quran Tafsir journey with reflection, context and practical lessons.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir1,
+    id: 'fatihah',
+    number: 1,
+    name: 'Al-Fatihah',
+    arabicName: 'الفاتحة',
+    meaning: 'The Opening',
+    ayahs: 7,
+    revelation: 'Makkan. It was revealed before the Hijrah and is recited in every rakah of salah.',
+    reason:
+      'It was revealed as the opening prayer of the Quran: praise of Allah, worship, seeking help, and asking for the straight path.',
+    narration:
+      'Surah Al-Fatihah is called the Mother of the Book because it gathers praise, tawheed, worship, dua, guidance, and the servant’s need for Allah.',
+    translation: [
+      'In the name of Allah, the Most Compassionate, the Most Merciful.',
+      'All praise is for Allah, Lord of all worlds.',
+      'The Most Compassionate, the Most Merciful.',
+      'Master of the Day of Judgment.',
+      'You alone we worship and You alone we ask for help.',
+      'Guide us to the straight path.',
+      'The path of those You have blessed, not those who earned anger, nor those who went astray.',
+    ],
+    lessons: [
+      'Begin every matter with Allah’s name.',
+      'Ask Allah for guidance every day.',
+      'True worship must be only for Allah.',
+    ],
   },
   {
-    id: 'tafsir-02',
-    episode: 2,
-    title: 'Tafsir Journey 02',
-    subtitle: 'Continue building your understanding of Allah’s words with a calm guided lesson.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir2,
+    id: 'baqarah',
+    number: 2,
+    name: 'Al-Baqarah',
+    arabicName: 'البقرة',
+    meaning: 'The Cow',
+    ayahs: 286,
+    revelation: 'Madinan. It was revealed after the Hijrah over a period of time in Madinah.',
+    reason:
+      'It guided the new Muslim community in faith, worship, family law, charity, fasting, Hajj, finance, patience, and obedience.',
+    narration:
+      'It is the longest Surah in the Quran. It teaches belief, warns against hypocrisy, explains the story of Bani Israel, and contains Ayat Al-Kursi.',
+    translation: [
+      'This is the Book about which there is no doubt, a guidance for those conscious of Allah.',
+      'Allah! There is no god worthy of worship except Him, the Ever-Living, All-Sustaining.',
+      'Allah does not burden any soul beyond what it can bear.',
+    ],
+    lessons: [
+      'The Quran is guidance for people of taqwa.',
+      'Faith must be followed by obedience.',
+      'Allah’s mercy is greater than the burden placed on a believer.',
+    ],
   },
   {
-    id: 'tafsir-03',
-    episode: 3,
-    title: 'Tafsir Journey 03',
-    subtitle: 'Learn meanings, reminders and heart-softening lessons from the Quran.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir3,
+    id: 'kahf',
+    number: 18,
+    name: 'Al-Kahf',
+    arabicName: 'الكهف',
+    meaning: 'The Cave',
+    ayahs: 110,
+    revelation: 'Makkan. It was revealed during the early period when Muslims faced trials and pressure.',
+    reason:
+      'It answered questions about the People of the Cave, Dhul-Qarnayn, and matters of the unseen, while teaching protection from trials.',
+    narration:
+      'Surah Al-Kahf presents four major tests: faith, wealth, knowledge, and power. It teaches patience, humility, and trust in Allah.',
+    translation: [
+      'All praise is for Allah Who revealed the Book to His servant and made it perfectly straight.',
+      'And never say of anything, “I will definitely do this tomorrow,” without adding, “if Allah wills.”',
+      'So whoever hopes for the meeting with their Lord, let them do righteous deeds and associate none in worship with their Lord.',
+    ],
+    lessons: [
+      'Protect your faith during difficult times.',
+      'Say InshaAllah when speaking about future plans.',
+      'Knowledge requires humility.',
+    ],
   },
   {
-    id: 'tafsir-04',
-    episode: 4,
-    title: 'Tafsir Journey 04',
-    subtitle: 'A beautiful study session to connect recitation with understanding.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir4,
+    id: 'yasin',
+    number: 36,
+    name: 'Ya-Sin',
+    arabicName: 'يس',
+    meaning: 'Ya-Sin',
+    ayahs: 83,
+    revelation: 'Makkan. It focuses strongly on resurrection, prophethood, and the signs of Allah.',
+    reason:
+      'It was revealed to strengthen belief in the Prophet ﷺ, the Hereafter, and Allah’s power to bring the dead back to life.',
+    narration:
+      'Surah Ya-Sin reminds the heart that Allah gives life, causes death, records deeds, and resurrects creation for judgment.',
+    translation: [
+      'By the Quran, full of wisdom.',
+      'You are truly one of the messengers.',
+      'On a straight path.',
+      'His command, when He wills something, is only to say to it, “Be,” and it is.',
+    ],
+    lessons: [
+      'The Quran is full of wisdom.',
+      'Resurrection is real.',
+      'Allah’s command is powerful and perfect.',
+    ],
   },
   {
-    id: 'tafsir-05',
-    episode: 5,
-    title: 'Tafsir Journey 05',
-    subtitle: 'Reflect on Quranic guidance and how it shapes daily life.',
-    media: TAFSIR_VIDEO_ASSETS.tafsir5,
+    id: 'rahman',
+    number: 55,
+    name: 'Ar-Rahman',
+    arabicName: 'الرحمن',
+    meaning: 'The Most Merciful',
+    ayahs: 78,
+    revelation: 'Commonly listed as Madinan by many prints, though some scholars discussed Makkan elements.',
+    reason:
+      'It reminds humans and jinn of Allah’s mercy, blessings, justice, Paradise, and accountability.',
+    narration:
+      'The repeated verse “Which of your Lord’s favors will you both deny?” makes the reader reflect deeply on gratitude.',
+    translation: [
+      'The Most Merciful taught the Quran.',
+      'He created humanity and taught them speech.',
+      'So which of your Lord’s favors will you both deny?',
+    ],
+    lessons: [
+      'Every blessing is from Allah.',
+      'The Quran itself is a mercy.',
+      'Gratitude should increase obedience.',
+    ],
+  },
+  {
+    id: 'mulk',
+    number: 67,
+    name: 'Al-Mulk',
+    arabicName: 'الملك',
+    meaning: 'The Sovereignty',
+    ayahs: 30,
+    revelation: 'Makkan. It teaches Allah’s ownership, power, creation, death, life, and accountability.',
+    reason:
+      'It was revealed to awaken the heart to Allah’s kingdom and remind people that life is a test.',
+    narration:
+      'Surah Al-Mulk is a powerful night recitation for reflection on the grave, the Hereafter, and Allah’s complete control.',
+    translation: [
+      'Blessed is the One in Whose Hands rests all authority. And He is Most Capable of everything.',
+      'He created death and life to test which of you is best in deeds.',
+      'He is the Most Mighty, the Most Forgiving.',
+    ],
+    lessons: [
+      'Life and death are tests.',
+      'Allah owns all authority.',
+      'Good deeds matter more than empty claims.',
+    ],
+  },
+  {
+    id: 'asr',
+    number: 103,
+    name: 'Al-Asr',
+    arabicName: 'العصر',
+    meaning: 'Time',
+    ayahs: 3,
+    revelation: 'Makkan.',
+    reason:
+      'It was revealed as a short but complete reminder that success depends on faith, good deeds, truth, and patience.',
+    narration:
+      'This Surah summarizes the path of salvation: believe, act righteously, encourage truth, and encourage patience.',
+    translation: [
+      'By time.',
+      'Surely humanity is in loss.',
+      'Except those who believe, do good, encourage one another to truth, and encourage one another to patience.',
+    ],
+    lessons: [
+      'Time is a trust.',
+      'Faith must produce good deeds.',
+      'Muslims should support each other with truth and patience.',
+    ],
+  },
+  {
+    id: 'ikhlas',
+    number: 112,
+    name: 'Al-Ikhlas',
+    arabicName: 'الإخلاص',
+    meaning: 'Sincerity',
+    ayahs: 4,
+    revelation: 'Makkan.',
+    reason:
+      'It was revealed to clarify pure tawheed: Allah is One, unique, self-sufficient, and unlike creation.',
+    narration:
+      'Surah Al-Ikhlas teaches the pure belief of Islam. It removes false ideas about Allah and strengthens sincerity.',
+    translation: [
+      'Say: He is Allah, One.',
+      'Allah, the Eternal Refuge.',
+      'He neither begets nor is born.',
+      'And there is none comparable to Him.',
+    ],
+    lessons: [
+      'Allah is absolutely One.',
+      'Allah needs no one, while everyone needs Him.',
+      'Nothing is equal or similar to Allah.',
+    ],
+  },
+  {
+    id: 'falaq',
+    number: 113,
+    name: 'Al-Falaq',
+    arabicName: 'الفلق',
+    meaning: 'The Daybreak',
+    ayahs: 5,
+    revelation: 'Makkan according to many scholars, with discussion among scholars.',
+    reason:
+      'It teaches the believer to seek Allah’s protection from external harms, darkness, magic, envy, and evil.',
+    narration:
+      'Together with Surah An-Nas, it is part of the Mu‘awwidhatayn, the two Surahs of seeking refuge in Allah.',
+    translation: [
+      'Say: I seek refuge in the Lord of the daybreak.',
+      'From the evil of whatever He has created.',
+      'And from the evil of the night when it grows dark.',
+      'And from the evil of those who blow on knots.',
+      'And from the evil of the envier when they envy.',
+    ],
+    lessons: [
+      'Seek protection from Allah alone.',
+      'Envy and hidden harm are real.',
+      'Allah is stronger than every harm.',
+    ],
+  },
+  {
+    id: 'nas',
+    number: 114,
+    name: 'An-Nas',
+    arabicName: 'الناس',
+    meaning: 'Mankind',
+    ayahs: 6,
+    revelation: 'Makkan according to many scholars, with discussion among scholars.',
+    reason:
+      'It teaches the believer to seek Allah’s protection from whispers, doubts, and the hidden evil of Shaytan.',
+    narration:
+      'Surah An-Nas closes the Quran by directing the heart back to Allah: Lord, King, and God of mankind.',
+    translation: [
+      'Say: I seek refuge in the Lord of mankind.',
+      'The King of mankind.',
+      'The God of mankind.',
+      'From the evil of the whisperer who withdraws.',
+      'Who whispers into the hearts of mankind.',
+      'From among jinn and mankind.',
+    ],
+    lessons: [
+      'Shaytan attacks through whispers.',
+      'Allah protects the heart.',
+      'End your recitation by seeking refuge in Allah.',
+    ],
   },
 ];
-
 
 const GENERAL_TAFSIR_RESOURCES = [
   {
@@ -1132,9 +1329,6 @@ export default function QuranScreen() {
   const [tafsirProgress, setTafsirProgress] =
     useState('');
 
-  const [activeTafsirVideo, setActiveTafsirVideo] =
-    useState<string | null>(null);
-
   const [reminderHour, setReminderHour] = useState('18');
   const [reminderMinute, setReminderMinute] =
     useState('30');
@@ -2021,7 +2215,6 @@ export default function QuranScreen() {
                 setSurahData(null);
                 setTafsirItems([]);
                 setTafsirProgress('');
-                setActiveTafsirVideo(null);
                 setSearch('');
                 setSection(key);
                 setMenuOpen(false);
@@ -2547,15 +2740,19 @@ export default function QuranScreen() {
   };
 
   const renderTafsir = () => {
-    const filteredTafsirVideos = TAFSIR_VIDEO_LESSONS.slice(0, 5).filter(video => {
-      const q = search.toLowerCase().trim();
+    const q = search.toLowerCase().trim();
 
+    const filteredImportantSurahs = IMPORTANT_SURAH_TAFSIR.filter(item => {
       if (!q) return true;
 
       return (
-        video.title.toLowerCase().includes(q) ||
-        video.subtitle.toLowerCase().includes(q) ||
-        String(video.episode).includes(q)
+        item.name.toLowerCase().includes(q) ||
+        item.arabicName.includes(search) ||
+        item.meaning.toLowerCase().includes(q) ||
+        item.revelation.toLowerCase().includes(q) ||
+        item.reason.toLowerCase().includes(q) ||
+        item.narration.toLowerCase().includes(q) ||
+        String(item.number).includes(q)
       );
     });
 
@@ -2571,13 +2768,13 @@ export default function QuranScreen() {
 
           <View style={{ flex: 1 }}>
             <Text style={styles.tafsirIntroTitle}>
-              How to use this Tafsir section
+              Important Surahs: Meaning, Revelation & Lessons
             </Text>
 
             <Text style={styles.tafsirIntroText}>
-              Start from episode 1, watch with focus, pause when needed, and write
-              one action point after each lesson. Tafsir should increase love,
-              humility and obedience to Allah.
+              This Tafsir page now focuses on selected important Surahs with English meanings,
+              short background, when they were revealed, why they were revealed, and key lessons.
+              Use it like the Translation page: read slowly, reflect, and return to the Arabic Quran.
             </Text>
           </View>
         </LinearGradient>
@@ -2586,7 +2783,7 @@ export default function QuranScreen() {
           <Search size={15} color="#064E3B" />
 
           <TextInput
-            placeholder="Search Tafsir episode..."
+            placeholder="Search important Surah..."
             placeholderTextColor="#867B6B"
             style={styles.searchInput}
             value={search}
@@ -2596,15 +2793,15 @@ export default function QuranScreen() {
 
         <View style={styles.tafsirPathCard}>
           <Text style={styles.tafsirPathTitle}>
-            Recommended Study Method
+            How To Study These Surahs
           </Text>
 
           {[
-            'Begin with Bismillah and a sincere intention.',
-            'Watch one lesson at a time without rushing.',
-            'Write down the main lesson that touched your heart.',
-            'Return to the Mushaf and read the related verses.',
-            'Make dua that Allah makes the Quran light in your life.',
+            'Read the Surah name, meaning and revelation period first.',
+            'Read the English meaning slowly like the Translation page.',
+            'Reflect on the narration and reason for revelation.',
+            'Write one lesson you want to practice today.',
+            'Return to the Mushaf and recite the Arabic with humility.',
           ].map((point, index) => (
             <View key={point} style={styles.tafsirPathRow}>
               <View style={styles.tafsirPathNumber}>
@@ -2617,108 +2814,130 @@ export default function QuranScreen() {
         </View>
 
         <Text style={styles.tafsirSectionHeading}>
-          Tafsir Video Lessons
+          Selected Important Surahs
         </Text>
 
-        {filteredTafsirVideos.map(video => {
-          const isActive = activeTafsirVideo === video.id;
+        {filteredImportantSurahs.length === 0 ? (
+          <LinearGradient
+            colors={['#FFFDF8', '#F7F0DC']}
+            style={styles.tafsirVideoCard}
+          >
+            <Text style={styles.tafsirVideoTitle}>
+              No Surah found
+            </Text>
 
-          return (
+            <Text style={styles.tafsirVideoDescription}>
+              Try searching by Surah name, number, meaning, Makkan, Madinan, or topic.
+            </Text>
+          </LinearGradient>
+        ) : (
+          filteredImportantSurahs.map(surah => (
             <LinearGradient
-              key={video.id}
+              key={surah.id}
               colors={['#FFFDF8', '#F7F0DC']}
               style={styles.tafsirVideoCard}
             >
-              <TouchableOpacity
-                activeOpacity={0.9}
-                onPress={() =>
-                  setActiveTafsirVideo(isActive ? null : video.id)
-                }
+              <LinearGradient
+                colors={['#043B2D', '#064E3B', '#0D7054']}
+                style={styles.tafsirVideoTop}
               >
-                <LinearGradient
-                  colors={['#043B2D', '#064E3B', '#0D7054']}
-                  style={styles.tafsirVideoTop}
-                >
-                  <View style={styles.tafsirVideoPatternOne} />
-                  <View style={styles.tafsirVideoPatternTwo} />
+                <View style={styles.tafsirVideoPatternOne} />
+                <View style={styles.tafsirVideoPatternTwo} />
 
-                  <View style={styles.tafsirVideoTopRow}>
-                    <View style={styles.tafsirEpisodePill}>
-                      <Text style={styles.tafsirEpisodeText}>
-                        Episode {video.episode}
-                      </Text>
-                    </View>
-
-                    <View style={styles.tafsirPlayCircle}>
-                      {isActive ? (
-                        <Pause size={23} color="#FFFFFF" />
-                      ) : (
-                        <Play size={23} color="#FFFFFF" />
-                      )}
-                    </View>
-                  </View>
-
-                  <View>
-                    <Text style={styles.tafsirVideoTitle}>
-                      {video.title}
-                    </Text>
-
-                    <Text style={styles.tafsirVideoSubtitle}>
-                      Mufti Menk Quran Tafsir Series
+                <View style={styles.tafsirVideoTopRow}>
+                  <View style={styles.tafsirEpisodePill}>
+                    <Text style={styles.tafsirEpisodeText}>
+                      Surah {surah.number}
                     </Text>
                   </View>
-                </LinearGradient>
-              </TouchableOpacity>
+
+                  <View style={styles.tafsirPlayCircle}>
+                    <BookOpen size={22} color="#FFFFFF" />
+                  </View>
+                </View>
+
+                <View>
+                  <Text style={styles.tafsirVideoTitle}>
+                    {surah.name} • {surah.arabicName}
+                  </Text>
+
+                  <Text style={styles.tafsirVideoSubtitle}>
+                    {surah.meaning} • {surah.ayahs} ayahs
+                  </Text>
+                </View>
+              </LinearGradient>
 
               <View style={styles.tafsirVideoBody}>
-                <Text style={styles.tafsirVideoDescription}>
-                  {video.subtitle}
-                </Text>
-
                 <View style={styles.tafsirVideoMetaRow}>
                   <View style={styles.tafsirMetaPill}>
-                    <Headphones size={12} color="#064E3B" />
-                    <Text style={styles.tafsirMetaText}>Watch & reflect</Text>
+                    <Star size={12} color="#064E3B" />
+                    <Text style={styles.tafsirMetaText}>
+                      {surah.revelation.includes('Madinan') ? 'Madinan' : 'Makkan'}
+                    </Text>
                   </View>
 
                   <View style={styles.tafsirMetaPill}>
                     <BookOpen size={12} color="#064E3B" />
-                    <Text style={styles.tafsirMetaText}>Quran meaning</Text>
+                    <Text style={styles.tafsirMetaText}>English meaning</Text>
                   </View>
                 </View>
 
-                {isActive && (
-                  <View style={styles.tafsirPlayerWrap}>
-                    <Video
-                      source={video.media}
-                      style={styles.tafsirVideoPlayer}
-                      resizeMode={ResizeMode.CONTAIN}
-                      useNativeControls
-                      shouldPlay={false}
-                    />
+                <Text style={styles.tafsirPathTitle}>
+                  When it was revealed
+                </Text>
+                <Text style={styles.tafsirVideoDescription}>
+                  {surah.revelation}
+                </Text>
+
+                <Text style={styles.tafsirPathTitle}>
+                  Why it was revealed
+                </Text>
+                <Text style={styles.tafsirVideoDescription}>
+                  {surah.reason}
+                </Text>
+
+                <Text style={styles.tafsirPathTitle}>
+                  Narration / Background
+                </Text>
+                <Text style={styles.tafsirVideoDescription}>
+                  {surah.narration}
+                </Text>
+
+                <Text style={styles.tafsirPathTitle}>
+                  English Translation / Meaning
+                </Text>
+
+                {surah.translation.map((line, index) => (
+                  <View key={`${surah.id}-${index}`} style={styles.ayahCard}>
+                    <View style={styles.ayahTop}>
+                      <Text style={styles.ayahMeta}>
+                        {surah.translation.length > 4 ? 'Selected meaning' : `Ayah ${index + 1}`}
+                      </Text>
+                    </View>
+
+                    <Text style={styles.translationText}>
+                      {line}
+                    </Text>
                   </View>
-                )}
+                ))}
 
-                <TouchableOpacity
-                  style={styles.tafsirWatchButton}
-                  onPress={() =>
-                    setActiveTafsirVideo(isActive ? null : video.id)
-                  }
-                >
-                  {isActive ? (
-                    <Pause size={15} color="#D8B85A" />
-                  ) : (
-                    <Play size={15} color="#D8B85A" />
-                  )}
+                <Text style={styles.tafsirPathTitle}>
+                  Key Lessons
+                </Text>
 
-                  <Text style={styles.tafsirWatchButtonText}>
-                    {isActive ? 'Hide Video' : 'Open Video Lesson'}
-                  </Text>
-                </TouchableOpacity>
+                {surah.lessons.map((lesson, index) => (
+                  <View key={lesson} style={styles.tafsirPathRow}>
+                    <View style={styles.tafsirPathNumber}>
+                      <Text style={styles.tafsirPathNumberText}>{index + 1}</Text>
+                    </View>
+
+                    <Text style={styles.tafsirPathText}>{lesson}</Text>
+                  </View>
+                ))}
               </View>
             </LinearGradient>
-          );
-        })}
+          ))
+        )}
       </>
     );
   };
