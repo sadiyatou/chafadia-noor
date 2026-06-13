@@ -16,10 +16,12 @@ sawn: require ("@/src/assets/images/sawn-chafadia.jpeg"),
 wudu: require ("@/src/assets/images/wudu-chafadia.jpeg"),
 zakat: require ("@/src/assets/images/zakat-chafadia.jpeg"),
 essensial1: require ("@/src/assets/images/essentials1.jpeg"),
-essential2: require ("@/src/assets/sounds/essential2.mp4"),
 essential3: require ("@/src/assets/sounds/essential3.mp4"),
 essential4: require ("@/src/assets/sounds/essential4.mp4"),
+ghusl1: require ("@/src/assets/images/ghusl-chafadia.jpeg"),
+ghusl2: require ("@/src/assets/images/ghusl2-chafadia.jpeg"),
 shroud: require ("@/src/assets/sounds/shrouding-deceased.mp4"),
+love: require ("@/src/assets/sounds/successfull mariage.mp4"),
 hajj: require ("@/src/assets/images/hajj-chafadia.jpeg"),
 tawaf: require ("@/src/assets/images/tawaf.png"),
 umrah1: require ("/src/assets/images/umrah-badal men.png"),
@@ -31,7 +33,7 @@ morning: require ("@/src/assets/images/morning-duas.png"),
 arafah: require ("@/src/assets/images/arafah.png"),
 menstraution: require ("@/src/assets/images/menstraution1.jpeg"),
 menstrauation: require ("@/src/assets/images/menstraution2.jpeg"),
-
+azan: require ("@/src/assets/sounds/azan mp3.png.mp3"),
 
 
 };
