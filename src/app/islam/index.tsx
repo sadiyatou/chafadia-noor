@@ -74,8 +74,6 @@ const assets = {
   ghusl2: require('@/src/assets/images/ghusl2-chafadia.jpeg'),
 
   essential3: require('@/src/assets/sounds/essential3.mp4'),
-  essential4: require('@/src/assets/sounds/essential4.mp4'),
-  shroud: require('@/src/assets/sounds/shrouding-deceased.mp4'),
 
   // Hajj, Umrah, Adhkar and Women Guides
   tawaf: require('@/src/assets/images/tawaf.png'),
@@ -616,42 +614,6 @@ const LESSONS: Lesson[] = [
       'Only knowledgeable and appropriate people should perform the washing.',
       'Privacy must be protected.',
       'This lesson helps families understand the process with respect.',
-    ],
-  },
-  {
-    id: 'washing-deceased-essential4',
-    title: 'Washing and Shrouding the Deceased: Reminder',
-    category: 'Death',
-    type: 'video',
-    media: assets.essential4,
-    icon: '🕊️',
-    level: 'Reminder',
-    duration: 'Video',
-    summary:
-      'A reminder connected to death, preparation, washing and shrouding the deceased.',
-    points: [
-      'Death reminds us to repent sincerely.',
-      'Families should learn janazah basics before they need them.',
-      'Respect and gentleness are required with the deceased.',
-    ],
-  },
-  {
-    id: 'shrouding-deceased-video',
-    title: 'Shrouding the Deceased',
-    category: 'Death',
-    type: 'video',
-    media: assets.shroud,
-    icon: '⚰️',
-    level: 'Practical',
-    duration: 'Video',
-    essential: true,
-    summary:
-      'A focused lesson on shrouding the deceased with dignity and Islamic respect.',
-    points: [
-      'The shroud should be clean and simple.',
-      'The deceased should be covered with dignity.',
-      'The process should be calm, respectful and private.',
-      'Seek scholar guidance for real-life situations.',
     ],
   },
   {
