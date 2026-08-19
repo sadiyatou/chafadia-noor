@@ -27,7 +27,9 @@ api.interceptors.response.use(
 );
 
 export const login = async (email, password) => {
-  const { data } = await api.post('/auth/login', { email, password });
+  // Server expects `contact` (email or phone), not `email` — see
+  // server/controllers/authController.js's login().
+  const { data } = await api.post('/auth/login', { contact: email, password });
   if (data.success) {
     if (data.user.role !== 'admin' && data.user.role !== 'main_admin') {
       throw new Error('Admin access required.');
