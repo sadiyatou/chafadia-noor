@@ -15,7 +15,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Notifications from 'expo-notifications';
+import Notifications from '../../utils/safeNotifications';
 
 import {
   RotateCcw,
@@ -1021,24 +1021,6 @@ export default function TasbihCounterPage() {
     });
   }, [category, query]);
 
-  useEffect(() => {
-    loadState();
-  }, []);
-
-  useEffect(() => {
-    saveState();
-  }, [
-    selectedDhikrId,
-    category,
-    count,
-    totalToday,
-    lifetimeTotal,
-    completedRounds,
-    customTarget,
-    vibrationOn,
-    soundOn,
-  ]);
-
   const loadState = async () => {
     try {
       const saved = await AsyncStorage.getItem(STORAGE_STATE);
@@ -1076,6 +1058,24 @@ export default function TasbihCounterPage() {
       );
     } catch {}
   };
+
+  useEffect(() => {
+    loadState();
+  }, []);
+
+  useEffect(() => {
+    saveState();
+  }, [
+    selectedDhikrId,
+    category,
+    count,
+    totalToday,
+    lifetimeTotal,
+    completedRounds,
+    customTarget,
+    vibrationOn,
+    soundOn,
+  ]);
 
   const increment = () => {
     const newCount = count + 1;

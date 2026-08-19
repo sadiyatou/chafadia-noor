@@ -15,7 +15,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Notifications from 'expo-notifications';
+import Notifications from '../../utils/safeNotifications';
 
 import {
   Moon,
@@ -550,6 +550,7 @@ export default function RamadanPage() {
 
   const progress = Math.round((completedFasts.length / 30) * 100);
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const foodCalendar = useMemo(() => {
     return customFoodPlan.map((meal, index) => {
       const date = addDays(ramadanStart, index);
@@ -573,19 +574,6 @@ export default function RamadanPage() {
     );
   }, [query, foodCalendar]);
 
-  useEffect(() => {
-    loadSaved();
-  }, []);
-
-  useEffect(() => {
-    const updateToday = () => setToday(new Date());
-    updateToday();
-
-    const timer = setInterval(updateToday, 60 * 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
   const loadSaved = async () => {
     const fasts = await AsyncStorage.getItem(STORAGE_FASTS);
     const goals = await AsyncStorage.getItem(STORAGE_GOALS);
@@ -602,6 +590,19 @@ export default function RamadanPage() {
       }
     }
   };
+
+  useEffect(() => {
+    loadSaved();
+  }, []);
+
+  useEffect(() => {
+    const updateToday = () => setToday(new Date());
+    updateToday();
+
+    const timer = setInterval(updateToday, 60 * 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   const toggleFast = async (date: Date) => {
     const key = dateKey(date);

@@ -1,6 +1,8 @@
 // src/app/islamic-courses/index.tsx
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import api from '../../api/client';
+import { getCourses } from '../../api/content';
 import {
   View,
   Text,
@@ -66,9 +68,10 @@ import {
   Library,
   NotebookPen,
   BadgeCheck,
+  Tv,
 } from 'lucide-react-native';
 
-type Tab = 'Home' | 'Register' | 'Courses' | 'Notes' | 'Exercises' | 'Exams' | 'Certificates' | 'Sites' | 'Post';
+type Tab = 'Home' | 'Register' | 'Courses' | 'Notes' | 'Exercises' | 'Exams' | 'Certificates' | 'Sites' | 'Post' | 'Live';
 type CourseLevel = 'Beginner' | 'Intermediate' | 'Advanced' | 'Scholar Track';
 type CourseCategory = 'Aqidah' | 'Fiqh' | 'Seerah' | 'Arabic' | 'Hadith' | 'Tafsir' | 'Islamic Finance' | 'Character' | 'Youth' | 'Teacher Training';
 type QuestionType = 'Multiple Choice' | 'Short Answer' | 'Reflection';
@@ -652,6 +655,46 @@ export default function IslamicCoursesPage() {
   const [reviewRating, setReviewRating] = useState('5');
   const [reviewLevel, setReviewLevel] = useState<CourseLevel>('Beginner');
   const [reviewCertificateTitle, setReviewCertificateTitle] = useState('');
+  const [liveCourses, setLiveCourses] = useState<{ id: number; title: string; teacher: string; scheduledAt: string; streamUrl?: string; description?: string }[]>([]);
+  const [liveLoading, setLiveLoading] = useState(false);
+
+  useEffect(() => {
+    if (tab !== 'Live') return;
+    setLiveLoading(true);
+    api.get('/courses/live').then(res => {
+      if (res.data?.courses) setLiveCourses(res.data.courses);
+    }).catch(() => {}).finally(() => setLiveLoading(false));
+  }, [tab]);
+
+  // Admin-published courses from the backend are shown first, ahead of the
+  // curated built-in set — the built-ins stay so the tab is never empty.
+  // Backend courses don't have notes/exercises/exams yet, so those stay
+  // empty for remote courses rather than being invented client-side.
+  useEffect(() => {
+    getCourses().then(data => {
+      if (!data.success || !data.courses?.length) return;
+      const mapped: CourseItem[] = data.courses.map((c: any) => ({
+        id: `remote-${c.id}`,
+        title: c.title,
+        category: 'Fiqh' as CourseCategory,
+        level: (c.level ? c.level[0].toUpperCase() + c.level.slice(1) : 'Beginner') as CourseLevel,
+        teacher: c.author_name || 'Chafadia Noor',
+        lessons: c.lesson_count || 0,
+        duration: c.duration_minutes ? `${c.duration_minutes} min` : '—',
+        certificate: true,
+        description: c.description || '',
+        outcomes: [],
+        notes: [],
+        exercises: [],
+        finalExam: [],
+        passMark: 70,
+        rating: 0,
+        students: c.enrollment_count || 0,
+        progress: 0,
+      }));
+      setCourses(prev => [...mapped, ...prev]);
+    });
+  }, []);
 
   const filteredCourses = useMemo(() => {
     const s = query.toLowerCase();
@@ -832,6 +875,25 @@ export default function IslamicCoursesPage() {
     if (tab === 'Exams') return <><SectionTitle icon={<Trophy size={18} color={GOLD} />} title="Final Exams" />{!student.registered && <View style={styles.warningCard}><ShieldCheck size={20} color={ROSE} /><Text style={styles.warningText}>Register first so your certificate can be issued with your name after passing.</Text></View>}{courses.map(course => { const key = getAttemptKey(course.id); const attempt = examAttempts[key]; const alreadyCertified = certificates.some(cert => cert.courseId === course.id && cert.studentId === student.studentId); const locked = attempt?.lastAttemptAt && Date.now() - attempt.lastAttemptAt < DAY_MS && attempt.count > 0; return <TouchableOpacity key={course.id} style={styles.examCourseCard} onPress={() => setSelectedExamCourse(course)}><Trophy size={22} color={GOLD} /><View style={{ flex: 1 }}><Text style={styles.noteCourseTitle}>{course.title}</Text><Text style={styles.noteCourseMeta}>Pass: {course.passMark}% • Fail below 60% • Attempts: {attempt?.count || 0}/3</Text><Text style={styles.examStatusText}>{alreadyCertified ? 'Certificate already issued' : locked ? 'Retake locked for one day' : completedExercises[getExerciseKey(course.id)] ? 'Ready for exam' : 'Complete exercises first'}</Text></View>{alreadyCertified ? <BadgeCheck size={21} color={GOLD} /> : locked ? <Lock size={20} color={ROSE} /> : <ChevronRight size={20} color={GREEN} />}</TouchableOpacity>; })}</>;
     if (tab === 'Certificates') return <><TouchableOpacity style={styles.primaryButton} onPress={() => setTab('Post')}><Upload size={18} color="#FFFFFF" /><Text style={styles.primaryButtonText}>Post External Certificate</Text></TouchableOpacity>{certificates.length === 0 && <View style={styles.emptyCard}><Award size={38} color={GOLD} /><Text style={styles.emptyTitle}>No certificates yet</Text><Text style={styles.emptyText}>Complete exercises and pass a final exam to automatically receive your certificate.</Text></View>}{certificates.map(cert => <CertificateCard key={cert.id} cert={cert} />)}</>;
     if (tab === 'Sites') return <>{sites.map(site => <SiteCard key={site.id} site={site} />)}</>;
+    if (tab === 'Live') return (
+      <>
+        <SectionTitle icon={<Tv size={18} color={GOLD} />} title="Live Classes" />
+        {liveLoading && <View style={styles.emptyCard}><Text style={styles.emptyText}>Loading live classes...</Text></View>}
+        {!liveLoading && liveCourses.length === 0 && (
+          <View style={styles.emptyCard}><Tv size={38} color={GOLD} /><Text style={styles.emptyTitle}>No live classes scheduled</Text><Text style={styles.emptyText}>Check back soon for upcoming live Islamic lessons.</Text></View>
+        )}
+        {liveCourses.map(lc => (
+          <View key={lc.id} style={styles.noteCourseCard}>
+            <Tv size={22} color={GOLD} />
+            <View style={{ flex: 1 }}>
+              <Text style={styles.noteCourseTitle}>{lc.title}</Text>
+              <Text style={styles.noteCourseMeta}>{lc.teacher} • {new Date(lc.scheduledAt).toLocaleString()}</Text>
+              {lc.description ? <Text style={[styles.noteCourseMeta, { marginTop: 3 }]}>{lc.description}</Text> : null}
+            </View>
+          </View>
+        ))}
+      </>
+    );
     return <PostPage />;
   };
 
@@ -853,7 +915,7 @@ export default function IslamicCoursesPage() {
         <View style={styles.goldGlow} /><View style={styles.greenGlow} />
         <LinearGradient colors={[GREEN, EMERALD]} style={styles.hero}><View style={styles.heroHeader}><View style={{ flex: 1 }}><View style={styles.brandRow}><Sparkles size={18} color={GOLD} /><Text style={styles.heroKicker}>Chafadia Noor Academy</Text></View><Text style={styles.heroTitle}>Islamic Courses</Text><Text style={styles.heroSubtitle}>Professional Notes • Exercises • Exams • Certificates</Text></View><View style={styles.heroIcon}><GraduationCap size={32} color={GOLD} /></View></View><Text style={styles.heroArabic}>طَلَبُ الْعِلْمِ نُورٌ</Text><Text style={styles.heroDua}>Seeking beneficial knowledge brings light to the heart.</Text></LinearGradient>
         <View style={styles.searchBox}><Search size={18} color={GREEN} /><TextInput style={styles.searchInput} placeholder="Search courses, teachers, levels..." placeholderTextColor="#8A8172" value={query} onChangeText={setQuery} /></View>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tabScroll}>{(['Home', 'Register', 'Courses', 'Notes', 'Exercises', 'Exams', 'Certificates', 'Sites', 'Post'] as Tab[]).map(item => { const active = tab === item; return <TouchableOpacity key={item} style={[styles.tabPill, active && styles.tabPillActive]} onPress={() => setTab(item)}>{tabIcon(item, active ? '#FFFFFF' : GREEN)}<Text style={[styles.tabText, active && styles.tabTextActive]}>{item}</Text></TouchableOpacity>; })}</ScrollView>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tabScroll}>{(['Home', 'Register', 'Courses', 'Notes', 'Exercises', 'Exams', 'Certificates', 'Sites', 'Live', 'Post'] as Tab[]).map(item => { const active = tab === item; return <TouchableOpacity key={item} style={[styles.tabPill, active && styles.tabPillActive]} onPress={() => setTab(item)}>{tabIcon(item, active ? '#FFFFFF' : GREEN)}<Text style={[styles.tabText, active && styles.tabTextActive]}>{item}</Text></TouchableOpacity>; })}</ScrollView>
         {renderContent()}
       </ScrollView>
 
@@ -869,7 +931,7 @@ export default function IslamicCoursesPage() {
 }
 
 function SectionTitle({ icon, title }: { icon: React.ReactNode; title: string }) { return <View style={styles.sectionTitle}>{icon}<Text style={styles.sectionTitleText}>{title}</Text></View>; }
-function tabIcon(tab: Tab, color: string) { if (tab === 'Home') return <School size={15} color={color} />; if (tab === 'Register') return <UserRound size={15} color={color} />; if (tab === 'Courses') return <BookOpen size={15} color={color} />; if (tab === 'Notes') return <BookMarked size={15} color={color} />; if (tab === 'Exercises') return <ClipboardCheck size={15} color={color} />; if (tab === 'Exams') return <Trophy size={15} color={color} />; if (tab === 'Certificates') return <Award size={15} color={color} />; if (tab === 'Sites') return <Globe2 size={15} color={color} />; return <PenLine size={15} color={color} />; }
+function tabIcon(tab: Tab, color: string) { if (tab === 'Home') return <School size={15} color={color} />; if (tab === 'Register') return <UserRound size={15} color={color} />; if (tab === 'Courses') return <BookOpen size={15} color={color} />; if (tab === 'Notes') return <BookMarked size={15} color={color} />; if (tab === 'Exercises') return <ClipboardCheck size={15} color={color} />; if (tab === 'Exams') return <Trophy size={15} color={color} />; if (tab === 'Certificates') return <Award size={15} color={color} />; if (tab === 'Sites') return <Globe2 size={15} color={color} />; if (tab === 'Live') return <Tv size={15} color={color} />; return <PenLine size={15} color={color} />; }
 
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: CREAM }, container: { flex: 1 }, content: { paddingHorizontal: 15, paddingTop: 18, paddingBottom: 45 },

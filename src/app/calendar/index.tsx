@@ -14,7 +14,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Notifications from 'expo-notifications';
+import Notifications from '../../utils/safeNotifications';
 
 import {
   CalendarDays,
@@ -381,10 +381,6 @@ export default function CalendarPage() {
     );
   }, [query, cells]);
 
-  useEffect(() => {
-    loadSavedData();
-  }, []);
-
   const loadSavedData = async () => {
     const savedNotes = await AsyncStorage.getItem(STORAGE_NOTES);
     const savedMarked = await AsyncStorage.getItem(STORAGE_MARKED_DAYS);
@@ -392,6 +388,10 @@ export default function CalendarPage() {
     if (savedNotes) setNotes(JSON.parse(savedNotes));
     if (savedMarked) setMarkedDays(JSON.parse(savedMarked));
   };
+
+  useEffect(() => {
+    loadSavedData();
+  }, []);
 
   const saveNotes = async (items: NoteItem[]) => {
     setNotes(items);

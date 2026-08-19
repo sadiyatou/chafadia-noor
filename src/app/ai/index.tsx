@@ -15,6 +15,7 @@ import {
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import api from '../../api/client';
 
 import {
   Bot,
@@ -622,32 +623,41 @@ export default function IslamicAIAssistant() {
     );
   };
 
-  const addAnswer = (question: string) => {
+  const addAnswer = async (question: string) => {
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
       text: question,
     };
 
+    const history = messages.slice(-10);
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setCategoryQuestion('');
     setLoading(true);
 
+    let answerText: string;
+    try {
+      const { data } = await api.post('/ai/ask', { question, history });
+      answerText = data.success && data.answer ? data.answer : generateAnswer(question);
+    } catch {
+      // No key configured yet, offline, or request failed — degrade to the
+      // built-in answer bank instead of leaving the user with nothing.
+      answerText = generateAnswer(question);
+    }
+
+    const assistantMessage: Message = {
+      id: `${Date.now()}-assistant`,
+      role: 'assistant',
+      text: answerText,
+    };
+
+    setMessages(prev => [...prev, assistantMessage]);
+    setLoading(false);
+
     setTimeout(() => {
-      const assistantMessage: Message = {
-        id: `${Date.now()}-assistant`,
-        role: 'assistant',
-        text: generateAnswer(question),
-      };
-
-      setMessages(prev => [...prev, assistantMessage]);
-      setLoading(false);
-
-      setTimeout(() => {
-        scrollRef.current?.scrollToEnd({ animated: true });
-      }, 150);
-    }, 700);
+      scrollRef.current?.scrollToEnd({ animated: true });
+    }, 150);
   };
 
   const sendMessage = (customQuestion?: string) => {
@@ -852,6 +862,7 @@ export default function IslamicAIAssistant() {
             <TouchableOpacity
               key={question}
               style={styles.quickPill}
+              // eslint-disable-next-line react-hooks/rules-of-hooks
               onPress={() => sendMessage(question)}
             >
               <Text style={styles.quickText}>

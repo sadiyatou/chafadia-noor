@@ -19,6 +19,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
 
+import { logoutUser, getCurrentUser, getMe } from '../../api/auth';
+import { registerPushToken } from '../../utils/registerPushToken';
+
 import {
   MessageCircle,
   BookOpen,
@@ -432,6 +435,7 @@ const TRANSLATIONS: any = {
 };
 
 export default function Dashboard() {
+  const [loggedInUser, setLoggedInUser] = useState<any>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false);
@@ -485,6 +489,15 @@ export default function Dashboard() {
   const t = TRANSLATIONS[selectedLanguage] || TRANSLATIONS.English;
 
   useEffect(() => {
+    const loadUser = async () => {
+      const cached = await getCurrentUser();
+      if (cached) setLoggedInUser(cached);
+
+      const fresh = await getMe();
+      if (fresh.success && fresh.user) setLoggedInUser(fresh.user);
+      if (fresh.success) registerPushToken();
+    };
+
     const loadSettings = async () => {
       const language = await AsyncStorage.getItem(STORAGE_LANGUAGE);
       const country = await AsyncStorage.getItem(STORAGE_COUNTRY);
@@ -507,6 +520,7 @@ export default function Dashboard() {
       }
     };
 
+    loadUser();
     loadSettings();
 
     const timer = setInterval(() => {
@@ -838,51 +852,6 @@ export default function Dashboard() {
     setRatingComment('');
   };
 
-  const SettingRow = ({
-    icon: Icon,
-    title,
-    subtitle,
-    value,
-    onValueChange,
-  }: any) => (
-    <View style={styles.settingRow}>
-      <View style={styles.settingIcon}>
-        <Icon size={15} color="#D8B85A" />
-      </View>
-
-      <View style={styles.settingTextBox}>
-        <Text style={styles.settingTitle}>{title}</Text>
-        <Text style={styles.settingSubtitle}>{subtitle}</Text>
-      </View>
-
-      <Switch
-        value={value}
-        onValueChange={onValueChange}
-        thumbColor={value ? '#D8B85A' : '#F1E7D5'}
-        trackColor={{
-          false: '#D9CDB8',
-          true: '#064E3B',
-        }}
-      />
-    </View>
-  );
-
-
-
-  const AdminControlSwitch = ({ title, subtitle, value, onValueChange }: any) => (
-    <View style={styles.adminControlRow}>
-      <View style={{ flex: 1 }}>
-        <Text style={styles.adminControlTitle}>{title}</Text>
-        <Text style={styles.adminControlSub}>{subtitle}</Text>
-      </View>
-      <Switch
-        value={value}
-        onValueChange={onValueChange}
-        thumbColor={value ? '#D8B85A' : '#F1E7D5'}
-        trackColor={{ false: '#D9CDB8', true: '#064E3B' }}
-      />
-    </View>
-  );
   return (
     <SafeAreaView
       style={[
@@ -933,6 +902,17 @@ export default function Dashboard() {
             />
           </View>
         </View>
+
+        {loggedInUser && (
+          <View style={styles.greetingBar}>
+            <Text style={[styles.greetingText, { color: theme.text }]}>
+              Assalamu Alaikum, {loggedInUser.fullName}
+            </Text>
+            <Text style={[styles.greetingEmail, { color: theme.muted }]}>
+              {loggedInUser.email}
+            </Text>
+          </View>
+        )}
 
         <LinearGradient
           colors={['#021F18', '#064E3B', '#0D7054']}
@@ -1177,9 +1157,9 @@ export default function Dashboard() {
             >
               <View style={styles.sideMenuTop}>
                 <View>
-                  <Text style={styles.sideTitle}>MENU:</Text>
+                  <Text style={styles.sideTitle}>{loggedInUser?.fullName || 'MENU'}</Text>
                   <Text style={styles.sideSubtitle}>
-                    Settings & personalization
+                    {loggedInUser?.email || 'Settings & personalization'}
                   </Text>
                 </View>
 
@@ -1589,6 +1569,32 @@ export default function Dashboard() {
                   onValueChange={() => {}}
                 />
               </View>
+
+              <TouchableOpacity
+                style={styles.logoutButton}
+                onPress={() => {
+                  Alert.alert(
+                    'Logout',
+                    'Are you sure you want to logout?',
+                    [
+                      { text: 'Cancel', style: 'cancel' },
+                      {
+                        text: 'Logout',
+                        style: 'destructive',
+                        onPress: async () => {
+                          setMenuOpen(false);
+                          await logoutUser();
+                          router.replace('/auth/login');
+                        },
+                      },
+                    ]
+                  );
+                }}
+              >
+                <Text style={styles.logoutButtonText}>
+                  Logout
+                </Text>
+              </TouchableOpacity>
 
               <TouchableOpacity
                 style={styles.doneButton}
@@ -2055,6 +2061,22 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     backgroundColor: '#064E3B',
     opacity: 0.055,
+  },
+
+  greetingBar: {
+    marginBottom: 12,
+    paddingHorizontal: 2,
+  },
+
+  greetingText: {
+    fontSize: 17,
+    fontWeight: '800',
+  },
+
+  greetingEmail: {
+    fontSize: 12,
+    fontWeight: '600',
+    marginTop: 2,
   },
 
   topControls: {
@@ -2830,6 +2852,23 @@ const styles = StyleSheet.create({
     lineHeight: 12,
     fontWeight: '600',
     marginTop: 1,
+  },
+
+  logoutButton: {
+    backgroundColor: '#991B1B',
+    borderRadius: 17,
+    paddingVertical: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 12,
+    marginTop: 16,
+  },
+
+  logoutButtonText: {
+    color: '#FFFFFF',
+    fontSize: 13,
+    fontWeight: '900',
+    letterSpacing: 0.5,
   },
 
   doneButton: {
@@ -4016,3 +4055,47 @@ const styles = StyleSheet.create({
   },
 
 });
+
+const SettingRow = ({
+  icon: Icon,
+  title,
+  subtitle,
+  value,
+  onValueChange,
+}: any) => (
+  <View style={styles.settingRow}>
+    <View style={styles.settingIcon}>
+      <Icon size={15} color="#D8B85A" />
+    </View>
+
+    <View style={styles.settingTextBox}>
+      <Text style={styles.settingTitle}>{title}</Text>
+      <Text style={styles.settingSubtitle}>{subtitle}</Text>
+    </View>
+
+    <Switch
+      value={value}
+      onValueChange={onValueChange}
+      thumbColor={value ? '#D8B85A' : '#F1E7D5'}
+      trackColor={{
+        false: '#D9CDB8',
+        true: '#064E3B',
+      }}
+    />
+  </View>
+);
+
+const AdminControlSwitch = ({ title, subtitle, value, onValueChange }: any) => (
+  <View style={styles.adminControlRow}>
+    <View style={{ flex: 1 }}>
+      <Text style={styles.adminControlTitle}>{title}</Text>
+      <Text style={styles.adminControlSub}>{subtitle}</Text>
+    </View>
+    <Switch
+      value={value}
+      onValueChange={onValueChange}
+      thumbColor={value ? '#D8B85A' : '#F1E7D5'}
+      trackColor={{ false: '#D9CDB8', true: '#064E3B' }}
+    />
+  </View>
+);

@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "scheme": "chafadianoor",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "icon": "./src/assets/images/icon.png",
     "splash": {
       "image": "./src/assets/images/splash.png",
@@ -81,7 +81,8 @@
           "color": "#064E3B",
           "defaultChannel": "default"
         }
-      ]
+      ],
+      "expo-font"
     ],
     "notification": {
       "icon": "./src/assets/images/icon.png",

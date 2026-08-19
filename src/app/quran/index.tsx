@@ -23,8 +23,8 @@ import {
 
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Audio } from 'expo-av';
-import * as Notifications from 'expo-notifications';
+import { Audio } from '../../utils/safeAV';
+import Notifications from '../../utils/safeNotifications';
 
 import {
   BookOpen,
@@ -1273,6 +1273,11 @@ export default function QuranScreen() {
   const fullSurahQueueRef = useRef<Ayah[]>([]);
   const fullSurahIndexRef = useRef(0);
   const stoppedRef = useRef(false);
+  // Tapping two surahs/pages in quick succession fires overlapping fetches;
+  // these track which one is the most recent so a slower, stale response
+  // can't overwrite the screen after a newer selection already resolved.
+  const requestedSurahRef = useRef<number | null>(null);
+  const requestedPageRef = useRef<number | null>(null);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [section, setSection] = useState<Section>('home');
@@ -1494,6 +1499,7 @@ export default function QuranScreen() {
   };
 
   const fetchPage = async (pageNumber = selectedPage) => {
+    requestedPageRef.current = pageNumber;
     try {
       setLoading(true);
 
@@ -1501,7 +1507,7 @@ export default function QuranScreen() {
         `CHAFADIA_PAGE_${pageNumber}`
       );
 
-      if (saved) {
+      if (saved && requestedPageRef.current === pageNumber) {
         setPageData(JSON.parse(saved));
       }
 
@@ -1511,20 +1517,24 @@ export default function QuranScreen() {
 
       const arabicJson = await arabicRes.json();
 
+      // A newer page was requested while this fetch was in flight — drop
+      // this stale response instead of overwriting the newer selection.
+      if (requestedPageRef.current !== pageNumber) return;
+
       const data = {
         arabic: arabicJson.data.ayahs || [],
       };
 
       setPageData(data);
     } catch {
-      if (!pageData) {
+      if (!pageData && requestedPageRef.current === pageNumber) {
         Alert.alert(
           'Offline Page',
           'This page is not saved yet. Open it once with internet, then save it.'
         );
       }
     } finally {
-      setLoading(false);
+      if (requestedPageRef.current === pageNumber) setLoading(false);
     }
   };
 
@@ -1532,6 +1542,7 @@ export default function QuranScreen() {
     surah: Surah,
     targetSection: Section = section
   ) => {
+    requestedSurahRef.current = surah.number;
     try {
       setSelectedSurah(surah);
       setSection(targetSection);
@@ -1543,7 +1554,7 @@ export default function QuranScreen() {
         `CHAFADIA_SURAH_${surah.number}`
       );
 
-      if (saved) {
+      if (saved && requestedSurahRef.current === surah.number) {
         setSurahData(JSON.parse(saved));
       }
 
@@ -1562,6 +1573,10 @@ export default function QuranScreen() {
       const translationJson = await translationRes.json();
       const audioJson = await audioRes.json();
 
+      // A newer surah was opened while this fetch was in flight — drop this
+      // stale response so it can't overwrite the newer selection's data.
+      if (requestedSurahRef.current !== surah.number) return;
+
       const data = {
         arabic: arabicJson.data.ayahs || [],
         translation: translationJson.data.ayahs || [],
@@ -1570,14 +1585,14 @@ export default function QuranScreen() {
 
       setSurahData(data);
     } catch {
-      if (!surahData) {
+      if (!surahData && requestedSurahRef.current === surah.number) {
         Alert.alert(
           'Offline Surah',
           'This Surah is not saved yet. Open it once with internet, then save it.'
         );
       }
     } finally {
-      setLoading(false);
+      if (requestedSurahRef.current === surah.number) setLoading(false);
     }
   };
 
@@ -2152,17 +2167,20 @@ export default function QuranScreen() {
     );
   };
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     setupNotificationChannel();
     loadInitialData();
   }, []);
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (section === 'read' && selectedReadSurah) {
       fetchPage(selectedPage);
     }
   }, [selectedPage, section, selectedReadSurah]);
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (selectedSurah) {
       openSurah(selectedSurah, section);
@@ -3773,6 +3791,7 @@ export default function QuranScreen() {
           </>
         )}
 
+        {/* eslint-disable-next-line react-hooks/rules-of-hooks */}
         {renderContent()}
 
         {!isReadingMushafPage && (

@@ -12,14 +12,18 @@ import {
   ScrollView,
   Alert,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 
 import { Link, router } from 'expo-router';
 
+import { resetPassword } from '../../api/auth';
+
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleResetPassword = () => {
+  const handleResetPassword = async () => {
     if (!email) {
       Alert.alert(
         'Missing Email',
@@ -28,14 +32,25 @@ const ForgotPassword = () => {
       return;
     }
 
-    Alert.alert(
-      'Password Reset',
-      'A password reset link has been sent to your email.'
-    );
+    setLoading(true);
 
-    console.log('RESET EMAIL:', email);
+    try {
+      const result = await resetPassword(email.trim());
 
-    router.replace('/auth/login');
+      if (result.success) {
+        Alert.alert(
+          'Password Reset',
+          'A password reset link has been sent to your email.'
+        );
+        router.replace('/auth/login');
+      } else {
+        Alert.alert('Error', result.message || 'Could not send reset email.');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -104,13 +119,18 @@ const ForgotPassword = () => {
 
           {/* RESET BUTTON */}
           <TouchableOpacity
-            style={styles.resetButton}
+            style={[styles.resetButton, loading && { opacity: 0.7 }]}
             onPress={handleResetPassword}
             activeOpacity={0.9}
+            disabled={loading}
           >
-            <Text style={styles.resetButtonText}>
-              Send Reset Link
-            </Text>
+            {loading ? (
+              <ActivityIndicator color="#ffffff" />
+            ) : (
+              <Text style={styles.resetButtonText}>
+                Send Reset Link
+              </Text>
+            )}
           </TouchableOpacity>
 
           {/* LOGIN LINK */}

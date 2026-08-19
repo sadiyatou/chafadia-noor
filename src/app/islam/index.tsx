@@ -1,45 +1,46 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  TextInput,
-  Modal,
-  Share,
-  Dimensions,
-} from 'react-native';
 import type { ColorValue } from 'react-native';
+import {
+  Dimensions,
+  Image,
+  Modal,
+  ScrollView,
+  Share,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Video, ResizeMode } from 'expo-av';
+import { ResizeMode, Video } from '../../utils/safeAV';
+import { LinearGradient } from 'expo-linear-gradient';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { getEssentials } from '../../api/content';
 
 import {
-  Search,
+  BadgeCheck,
   BookOpen,
+  CheckCircle,
+  Clock,
+  Eye,
+  Flame,
   Heart,
   HeartOff,
-  PlayCircle,
-  CheckCircle,
-  X,
-  Share2,
-  Star,
-  ShieldCheck,
-  Eye,
-  Sparkles,
-  ListChecks,
-  Clock,
-  Flame,
-  VideoIcon,
-  Moon,
   HeartPulse,
+  ListChecks,
+  Moon,
   Plane,
-  BadgeCheck,
+  PlayCircle,
+  Search,
+  Share2,
+  ShieldCheck,
+  Sparkles,
+  Star,
+  VideoIcon,
+  X,
 } from 'lucide-react-native';
 
 const { width, height } = Dimensions.get('window');
@@ -72,8 +73,8 @@ const assets = {
   essential1: require('@/src/assets/images/essentials1.jpeg'),
   ghusl1: require('@/src/assets/images/ghusl-chafadia.jpeg'),
   ghusl2: require('@/src/assets/images/ghusl2-chafadia.jpeg'),
-  essential4: require('@/src/assets/sounds/essential4.mp4'),
-  shroud: require('@/src/assets/sounds/shrouding-deceased.mp4'),
+  essential4: require('@/src/assets/sounds/azan mp3.png.mp3'),
+  shroud: require('@/src/assets/sounds/azan mp3.png.mp3'),
 
   // Hajj, Umrah, Adhkar and Women Guides
   tawaf: require('@/src/assets/images/tawaf.png'),
@@ -126,7 +127,7 @@ const CATEGORIES = [
 
 
 
-const LESSONS: Lesson[] = [
+const DEFAULT_LESSONS: Lesson[] = [
   {
     id: 'pillars',
     title: '5 Pillars of Islam',
@@ -796,10 +797,7 @@ export default function IslamicEssentialsPage() {
   const [fullImage, setFullImage] = useState<any>(null);
   const [saved, setSaved] = useState<string[]>([]);
   const [completed, setCompleted] = useState<string[]>([]);
-
-  useEffect(() => {
-    loadData();
-  }, []);
+  const [lessons, setLessons] = useState<Lesson[]>(DEFAULT_LESSONS);
 
   const loadData = async () => {
     try {
@@ -810,6 +808,32 @@ export default function IslamicEssentialsPage() {
       if (completedItems) setCompleted(JSON.parse(completedItems));
     } catch {}
   };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  // Admin-published essentials from the backend are shown first, ahead of
+  // the curated built-in lessons — the built-ins stay so the tab is never empty.
+  useEffect(() => {
+    getEssentials().then(data => {
+      if (!data.success || !data.essentials?.length) return;
+      const mapped: Lesson[] = data.essentials.map((e: any) => ({
+        id: `remote-${e.id}`,
+        title: e.title,
+        category: e.category || 'Daily Life',
+        type: e.media_type === 'video' || e.media_type === 'audio' ? 'video' : 'image',
+        media: e.media_url ? { uri: e.media_url } : undefined,
+        icon: '📖',
+        level: 'Essential',
+        duration: '',
+        essential: true,
+        summary: e.description || '',
+        points: (e.content || '').split('\n').map((s: string) => s.trim()).filter(Boolean),
+      }));
+      setLessons([...mapped, ...DEFAULT_LESSONS]);
+    });
+  }, []);
 
   const saveSaved = async (items: string[]) => {
     setSaved(items);
@@ -824,7 +848,7 @@ export default function IslamicEssentialsPage() {
   const filtered = useMemo(() => {
     const search = query.toLowerCase();
 
-    return LESSONS.filter(item => {
+    return lessons.filter(item => {
       const matchCategory =
         category === 'All' ||
         item.category === category ||
@@ -840,13 +864,13 @@ export default function IslamicEssentialsPage() {
 
       return matchCategory && matchSearch;
     });
-  }, [query, category, saved, completed]);
+  }, [query, category, saved, completed, lessons]);
 
-  const featuredLessons = LESSONS.filter(item => item.featured).slice(0, 8);
-  const essentialLessons = LESSONS.filter(item => item.essential);
-  const videoLessons = LESSONS.filter(item => item.type === 'video');
-  const spotlight = featuredLessons[0] || LESSONS[0];
-  const progress = LESSONS.length ? Math.round((completed.length / LESSONS.length) * 100) : 0;
+  const featuredLessons = lessons.filter(item => item.featured).slice(0, 8);
+  const essentialLessons = lessons.filter(item => item.essential);
+  const videoLessons = lessons.filter(item => item.type === 'video');
+  const spotlight = featuredLessons[0] || lessons[0];
+  const progress = lessons.length ? Math.round((completed.length / lessons.length) * 100) : 0;
 
   const toggleSave = (id: string) => {
     const next = saved.includes(id)
@@ -1045,7 +1069,7 @@ export default function IslamicEssentialsPage() {
 
           <View style={styles.heroStats}>
             <View style={styles.heroStat}>
-              <Text style={styles.heroStatNumber}>{LESSONS.length}</Text>
+              <Text style={styles.heroStatNumber}>{lessons.length}</Text>
               <Text style={styles.heroStatLabel}>Lessons</Text>
             </View>
 

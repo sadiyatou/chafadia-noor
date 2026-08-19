@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import {
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import { getArticles as fetchArticles } from '../../api/content';
 
 import {
   Search,
@@ -544,7 +545,7 @@ function practiceForName(id: number, transliteration: string) {
 
 const NAMES_OF_ALLAH: NameOfAllah[] = NAME_DATA.map(item => ({ ...item, ...practiceForName(item.id, item.transliteration) }));
 
-const ARTICLES: ArticleItem[] = [
+const DEFAULT_ARTICLES: ArticleItem[] = [
   {
     id: 'aqidah-1',
     title: 'Understanding Tawheed',
@@ -761,10 +762,28 @@ export default function IslamicArticlesPage() {
   const [zakat, setZakat] = useState<ZakatInputs>(DEFAULT_ZAKAT_INPUTS);
   const [nameCounts, setNameCounts] = useState<Record<number, number>>({});
   const [nameSessions, setNameSessions] = useState<Record<number, number>>({});
+  const [articles, setArticles] = useState<ArticleItem[]>(DEFAULT_ARTICLES);
+
+  // Admin-published articles from the backend are shown first, ahead of the
+  // curated built-in set — the built-ins stay so the tab is never empty.
+  useEffect(() => {
+    fetchArticles().then(data => {
+      if (!data.success || !data.articles?.length) return;
+      const mapped: ArticleItem[] = data.articles.map((a: any) => ({
+        id: `remote-${a.id}`,
+        title: a.title,
+        category: (a.category || 'Knowledge') as ArticleCategory,
+        summary: a.excerpt || '',
+        content: (a.content || '').split(/\n\n+/).filter(Boolean),
+        keyPoints: [],
+      }));
+      setArticles([...mapped, ...DEFAULT_ARTICLES]);
+    });
+  }, []);
 
   const filteredArticles = useMemo(() => {
     const s = query.toLowerCase();
-    return ARTICLES.filter(article => {
+    return articles.filter(article => {
       const matchesCategory = selectedCategory === 'All' || article.category === selectedCategory;
       const matchesText = article.title.toLowerCase().includes(s) || article.summary.toLowerCase().includes(s) || article.category.toLowerCase().includes(s);
       return matchesCategory && matchesText;
@@ -781,7 +800,7 @@ export default function IslamicArticlesPage() {
     return NAMES_OF_ALLAH.filter(item => item.arabic.includes(query) || item.transliteration.toLowerCase().includes(s) || item.meaning.toLowerCase().includes(s));
   }, [query]);
 
-  const categories = useMemo(() => ['All', ...Array.from(new Set(ARTICLES.map(item => item.category)))] as (ArticleCategory | 'All')[], []);
+  const categories = useMemo(() => ['All', ...Array.from(new Set(articles.map(item => item.category)))] as (ArticleCategory | 'All')[], [articles]);
 
   const n = (value: string) => Number(value.replace(/,/g, '')) || 0;
   const halalMoneyAssets = n(zakat.cash) + n(zakat.bankSavings) + n(zakat.goldValue) + n(zakat.silverValue) + n(zakat.businessStock) + n(zakat.moneyOwedToYou) + n(zakat.investments) + n(zakat.crypto) + n(zakat.rentalIncomeSaved) + n(zakat.livestockValue);
@@ -810,7 +829,7 @@ ${text}` });
     setNameCounts(prev => ({ ...prev, [name.id]: 0 }));
   };
 
-  const savedItems = ARTICLES.filter(item => savedArticles.includes(item.id));
+  const savedItems = articles.filter(item => savedArticles.includes(item.id));
   const savedAllahNames = NAMES_OF_ALLAH.filter(item => savedNames.includes(item.id));
   const totalDhikrToday = Object.values(nameCounts).reduce((sum, value) => sum + value, 0);
   const completedSessions = Object.values(nameSessions).reduce((sum, value) => sum + value, 0);

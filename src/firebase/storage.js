@@ -40,7 +40,8 @@ export const createFileName = ({
 export const getFileExtension = uri => {
   if (!uri) return '';
 
-  const parts = uri.split('.');
+  const withoutQuery = uri.split('?')[0].split('#')[0];
+  const parts = withoutQuery.split('.');
   return parts[parts.length - 1];
 };
 

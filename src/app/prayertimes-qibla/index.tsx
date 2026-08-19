@@ -19,8 +19,8 @@ import {
 
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Location from 'expo-location';
-import * as Notifications from 'expo-notifications';
-import { Audio } from 'expo-av';
+import Notifications from '../../utils/safeNotifications';
+import { Audio } from '../../utils/safeAV';
 
 import {
   Bell,
@@ -271,14 +271,31 @@ export default function PrayerScreen() {
     ];
   }, [prayerTimes]);
 
-  const nextPrayer = useMemo(() => {
-    const now = new Date();
+  // `prayers` only changes when prayerTimes is (re)fetched, so without a
+  // ticking dependency `nextPrayer` would freeze at whatever it was when the
+  // screen loaded and never advance to the next prayer as the day goes on.
+  const [nowTick, setNowTick] = useState(() => new Date());
+  useEffect(() => {
+    const t = setInterval(() => setNowTick(new Date()), 30000);
+    return () => clearInterval(t);
+  }, []);
 
-    return (
-      prayers.find(prayer => prayer.time > now) ||
-      prayers[0]
-    );
-  }, [prayers]);
+  const nextPrayer = useMemo(() => {
+    const now = nowTick;
+    const upcoming = prayers.find(prayer => prayer.time > now);
+    if (upcoming) return upcoming;
+    if (!prayers.length) return prayers[0];
+
+    // All of today's prayers have passed — the real "next prayer" is
+    // tomorrow's Fajr, not today's (already-passed) prayers[0].
+    if (coords) {
+      const tomorrow = new Date(now);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const tomorrowTimes = getPrayerTimesForDate(coords.latitude, coords.longitude, tomorrow);
+      return { ...prayers[0], time: tomorrowTimes.fajr };
+    }
+    return prayers[0];
+  }, [prayers, nowTick, coords]);
 
   const monthlyPrayerCalendar = useMemo(() => {
     if (!coords) return [];
@@ -351,6 +368,7 @@ export default function PrayerScreen() {
     }
 
     return `Turn left ${amount}°`;
+    // eslint-disable-next-line react-hooks/rules-of-hooks
   }, [
     prayerTimes,
     isQiblaAligned,
@@ -590,6 +608,7 @@ export default function PrayerScreen() {
     }
   };
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     getLocationAndTimes();
 

@@ -72,11 +72,6 @@ export default function MosqueFinderPage() {
     GOOGLE_PLACES_API_KEY &&
     !GOOGLE_PLACES_API_KEY.includes('PUT_YOUR');
 
-  useEffect(() => {
-    loadFavorites();
-    getCurrentLocationAndFindMosques();
-  }, []);
-
   const filteredMosques = useMemo(() => {
     const s = query.toLowerCase();
 
@@ -143,6 +138,11 @@ export default function MosqueFinderPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadFavorites();
+    getCurrentLocationAndFindMosques();
+  }, []);
 
   const searchNearbyMosques = async (
     latitude: number,

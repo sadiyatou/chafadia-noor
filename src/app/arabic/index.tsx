@@ -15,9 +15,9 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Notifications from 'expo-notifications';
+import Notifications from '../../utils/safeNotifications';
 import * as Speech from 'expo-speech';
-import { Audio } from 'expo-av';
+import { Audio } from '../../utils/safeAV';
 
 import {
   Home,
@@ -44,9 +44,11 @@ import {
   Bot,
   Award,
   Crown,
+  Library,
 } from 'lucide-react-native';
+import api from '../../api/client';
 
-type Tab = 'path' | 'learn' | 'quiz' | 'speak' | 'ai' | 'rank' | 'connect';
+type Tab = 'path' | 'learn' | 'quiz' | 'speak' | 'ai' | 'rank' | 'connect' | 'resources';
 
 type Lesson = {
   id: string;
@@ -255,6 +257,16 @@ export default function ArabicLearningPage() {
   const [gems, setGems] = useState(25);
   const [energy, setEnergy] = useState(25);
   const [loading, setLoading] = useState(true);
+  const [resources, setResources] = useState<{ id: number; title: string; type: string; url?: string; description?: string }[]>([]);
+  const [resourcesLoading, setResourcesLoading] = useState(false);
+
+  useEffect(() => {
+    if (tab !== 'resources') return;
+    setResourcesLoading(true);
+    api.get('/arabic-resources').then(res => {
+      if (res.data?.resources) setResources(res.data.resources);
+    }).catch(() => {}).finally(() => setResourcesLoading(false));
+  }, [tab]);
 
   const [quizIndex, setQuizIndex] = useState(0);
   const [selected, setSelected] = useState('');
@@ -271,11 +283,6 @@ export default function ArabicLearningPage() {
       text: 'Assalamu Alaikum! I am your Arabic practice partner. Ask me about Arabic words, pronunciation, sentences, or conversation.',
     },
   ]);
-
-  useEffect(() => {
-    loadProgress();
-    scheduleRevisionReminder();
-  }, []);
 
   const loadProgress = async () => {
     try {
@@ -362,6 +369,11 @@ export default function ArabicLearningPage() {
       });
     } catch {}
   };
+
+  useEffect(() => {
+    loadProgress();
+    scheduleRevisionReminder();
+  }, []);
 
   const speak = (text: string) => {
     Speech.stop();
@@ -1033,6 +1045,37 @@ export default function ArabicLearningPage() {
           </>
         )}
 
+        {tab === 'resources' && (
+          <>
+            <LinearGradient colors={[GREEN, TEAL]} style={styles.rankHero}>
+              <Library size={42} color="#FFFFFF" />
+              <Text style={styles.rankTitle}>Arabic Resources</Text>
+              <Text style={styles.rankText}>Books, audio, and materials uploaded by admins.</Text>
+            </LinearGradient>
+            {resourcesLoading && (
+              <View style={{ padding: 30, alignItems: 'center' }}>
+                <ActivityIndicator color={GREEN} />
+              </View>
+            )}
+            {!resourcesLoading && resources.length === 0 && (
+              <View style={{ padding: 24, alignItems: 'center' }}>
+                <Library size={36} color="#C4B89A" />
+                <Text style={{ color: '#6B6257', fontWeight: '800', marginTop: 10, textAlign: 'center' }}>No resources uploaded yet. Check back soon.</Text>
+              </View>
+            )}
+            {resources.map(r => (
+              <View key={r.id} style={styles.studentCard}>
+                <View style={styles.studentAvatar}><Library size={22} color="#FFFFFF" /></View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.rankName}>{r.title}</Text>
+                  <Text style={styles.rankCountry}>{r.type}</Text>
+                  {r.description ? <Text style={styles.studentInterest}>{r.description}</Text> : null}
+                </View>
+              </View>
+            ))}
+          </>
+        )}
+
         {tab === 'connect' && (
           <>
             <LinearGradient colors={[GREEN, TEAL]} style={styles.rankHero}>
@@ -1085,6 +1128,7 @@ export default function ArabicLearningPage() {
           { key: 'ai', icon: Bot },
           { key: 'rank', icon: Award },
           { key: 'connect', icon: Users },
+          { key: 'resources', icon: Library },
         ].map(item => {
           const Icon = item.icon;
           const active = tab === item.key;

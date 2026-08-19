@@ -1,5 +1,5 @@
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,10 @@ import {
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as FileSystem from 'expo-file-system/legacy';
+import * as Sharing from 'expo-sharing';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getDownloads, registerDownload } from '../../api/content';
 
 import {
   Search,
@@ -89,6 +93,18 @@ type OfflineItem = {
   favorite: boolean;
   autoUpdate: boolean;
   availableOffline: boolean;
+  // Present only for items published by the admin (server/routes/downloads.js) —
+  // these download for real via expo-file-system; items without fileUrl are the
+  // curated demo cards and keep the simulated progress behavior.
+  fileUrl?: string;
+  remoteId?: number;
+  localUri?: string;
+};
+
+const OFFLINE_FILES_KEY = 'chafadia_offline_files_v1';
+
+const FILE_TYPE_TO_DOWNLOAD_TYPE: Record<string, DownloadType> = {
+  video: 'Video', audio: 'Audio', pdf: 'PDF', document: 'PDF', image: 'Image',
 };
 
 type OfflineSettings = {
@@ -266,6 +282,60 @@ export default function OfflineDownloadsPage() {
   const [selectedType, setSelectedType] = useState<DownloadType | 'All'>('All');
   const [sortMode, setSortMode] = useState<SortMode>('Recent');
   const [isOnline, setIsOnline] = useState(true);
+  const resumables = useRef<Record<string, FileSystem.DownloadResumable>>({});
+
+  // Admin-published material (server/routes/downloads.js) is fetched and
+  // merged ahead of the curated demo cards; already-downloaded files are
+  // detected from the local uri map saved in AsyncStorage.
+  useEffect(() => {
+    (async () => {
+      let localMap: Record<string, string> = {};
+      try {
+        const raw = await AsyncStorage.getItem(OFFLINE_FILES_KEY);
+        if (raw) localMap = JSON.parse(raw);
+      } catch {}
+
+      const data = await getDownloads();
+      if (!data.success || !data.downloads?.length) return;
+
+      const mapped: OfflineItem[] = data.downloads.map((d: any) => {
+        const id = `remote-${d.id}`;
+        const downloaded = !!localMap[id];
+        const sizeMB = d.file_size ? +(d.file_size / (1024 * 1024)).toFixed(1) : 0;
+        return {
+          id,
+          title: d.title,
+          subtitle: d.description || '',
+          type: FILE_TYPE_TO_DOWNLOAD_TYPE[d.file_type] || 'PDF',
+          status: downloaded ? 'Downloaded' : 'Queued',
+          progress: downloaded ? 100 : 0,
+          sizeMB,
+          downloadedMB: downloaded ? sizeMB : 0,
+          quality: 'Original',
+          category: d.category || 'general',
+          dateAdded: new Date(d.created_at).toLocaleDateString(),
+          encrypted: false,
+          favorite: false,
+          autoUpdate: false,
+          availableOffline: downloaded,
+          fileUrl: d.file_url,
+          remoteId: d.id,
+          localUri: localMap[id],
+        };
+      });
+
+      setItems(prev => [...mapped, ...prev]);
+    })();
+  }, []);
+
+  const saveLocalUri = async (id: string, uri: string | null) => {
+    try {
+      const raw = await AsyncStorage.getItem(OFFLINE_FILES_KEY);
+      const map = raw ? JSON.parse(raw) : {};
+      if (uri) map[id] = uri; else delete map[id];
+      await AsyncStorage.setItem(OFFLINE_FILES_KEY, JSON.stringify(map));
+    } catch {}
+  };
 
   const filteredItems = useMemo(() => {
     const s = query.toLowerCase();
@@ -300,7 +370,7 @@ export default function OfflineDownloadsPage() {
     setSelectedItem(prev => prev?.id === id ? { ...prev, ...changes } : prev);
   };
 
-  const startDownload = (id: string) => {
+  const startDownload = async (id: string) => {
     const item = items.find(i => i.id === id);
     if (!item) return;
 
@@ -310,11 +380,80 @@ export default function OfflineDownloadsPage() {
       return;
     }
 
-    updateItem(id, { status: 'Downloading' });
+    // Admin-published items have a real fileUrl — download it for real.
+    // Demo cards (no fileUrl) keep the old simulated flow so they're still
+    // useful for previewing the UI.
+    if (!item.fileUrl) {
+      updateItem(id, { status: 'Downloading' });
+      return;
+    }
+
+    try {
+      const dir = `${FileSystem.documentDirectory}downloads/`;
+      await FileSystem.makeDirectoryAsync(dir, { intermediates: true }).catch(() => {});
+      const safeName = `${item.remoteId}_${item.title.replace(/[^a-z0-9]/gi, '_').slice(0, 60)}`;
+      const localUri = `${dir}${safeName}`;
+
+      updateItem(id, { status: 'Downloading', progress: 0 });
+
+      const resumable = FileSystem.createDownloadResumable(item.fileUrl, localUri, {}, (p) => {
+        const total = p.totalBytesExpectedToWrite || 1;
+        const pct = Math.min(100, Math.round((p.totalBytesWritten / total) * 100));
+        updateItem(id, {
+          progress: pct,
+          downloadedMB: +(p.totalBytesWritten / (1024 * 1024)).toFixed(1),
+        });
+      });
+      resumables.current[id] = resumable;
+
+      const result = await resumable.downloadAsync();
+      delete resumables.current[id];
+      if (!result) throw new Error('Download did not complete.');
+
+      await saveLocalUri(id, result.uri);
+      const info = await FileSystem.getInfoAsync(result.uri);
+      const downloadedMB = item.sizeMB || (info.exists && info.size ? +(info.size / (1024 * 1024)).toFixed(1) : 0);
+      updateItem(id, {
+        status: 'Downloaded',
+        progress: 100,
+        downloadedMB,
+        availableOffline: true,
+        localUri: result.uri,
+        lastOpened: 'Just now',
+      });
+      if (item.remoteId) registerDownload(item.remoteId).catch(() => {});
+    } catch {
+      delete resumables.current[id];
+      updateItem(id, { status: 'Failed' });
+    }
   };
 
-  const pauseDownload = (id: string) => updateItem(id, { status: 'Paused' });
-  const retryDownload = (id: string) => updateItem(id, { status: 'Downloading', progress: Math.max(5, items.find(i => i.id === id)?.progress || 0) });
+  const pauseDownload = async (id: string) => {
+    const resumable = resumables.current[id];
+    if (resumable) {
+      try { await resumable.pauseAsync(); } catch {}
+    }
+    updateItem(id, { status: 'Paused' });
+  };
+
+  const retryDownload = (id: string) => {
+    const item = items.find(i => i.id === id);
+    if (item?.fileUrl) { startDownload(id); return; }
+    updateItem(id, { status: 'Downloading', progress: Math.max(5, item?.progress || 0) });
+  };
+
+  const openDownload = async (item: OfflineItem) => {
+    if (!item.localUri) {
+      Alert.alert('Open Offline', `${item.title} is ready offline.`);
+      return;
+    }
+    try {
+      if (await Sharing.isAvailableAsync()) await Sharing.shareAsync(item.localUri);
+      else Alert.alert('Saved offline', `File saved at:\n${item.localUri}`);
+    } catch {
+      Alert.alert('Could not open file', 'The file may have been removed from device storage.');
+    }
+  };
 
   const completeDownload = (id: string) => {
     const item = items.find(i => i.id === id);
@@ -334,8 +473,13 @@ export default function OfflineDownloadsPage() {
       {
         text: 'Delete',
         style: 'destructive',
-        onPress: () => {
-          setItems(prev => prev.map(item => item.id === id ? { ...item, status: 'Queued', progress: 0, downloadedMB: 0, availableOffline: false } : item));
+        onPress: async () => {
+          const item = items.find(i => i.id === id);
+          if (item?.localUri) {
+            try { await FileSystem.deleteAsync(item.localUri, { idempotent: true }); } catch {}
+            await saveLocalUri(id, null);
+          }
+          setItems(prev => prev.map(i => i.id === id ? { ...i, status: 'Queued', progress: 0, downloadedMB: 0, availableOffline: false, localUri: undefined } : i));
           setSelectedItem(null);
         },
       },
@@ -379,7 +523,16 @@ export default function OfflineDownloadsPage() {
   };
 
   const downloadAllQueued = () => {
-    setItems(prev => prev.map(item => item.status === 'Queued' || item.status === 'Paused' || item.status === 'Failed' ? { ...item, status: 'Downloading' } : item));
+    const pending = items.filter(item => item.status === 'Queued' || item.status === 'Paused' || item.status === 'Failed');
+    // Items with a real fileUrl need startDownload() to actually create/resume
+    // the FileSystem.DownloadResumable — flipping status alone (the old
+    // behavior) left them stuck showing "Downloading" with no progress.
+    // Demo items (no fileUrl) keep the simulated flow, which only reacts to
+    // the status flip.
+    pending.forEach(item => {
+      if (item.fileUrl) startDownload(item.id);
+      else updateItem(item.id, { status: 'Downloading' });
+    });
   };
 
   const renderContent = () => {
@@ -597,7 +750,7 @@ export default function OfflineDownloadsPage() {
 
   function ActionButton({ item }: { item: OfflineItem }) {
     if (item.status === 'Downloaded') {
-      return <TouchableOpacity onPress={() => Alert.alert('Open Offline', `${item.title} is ready offline.`)}><Eye size={20} color={GREEN} /></TouchableOpacity>;
+      return <TouchableOpacity onPress={() => openDownload(item)}><Eye size={20} color={GREEN} /></TouchableOpacity>;
     }
     if (item.status === 'Downloading') {
       return <TouchableOpacity onPress={() => pauseDownload(item.id)}><Pause size={20} color={GREEN} /></TouchableOpacity>;
@@ -746,7 +899,7 @@ export default function OfflineDownloadsPage() {
 
               <View style={styles.detailActionsGrid}>
                 {selectedItem.status === 'Downloaded' ? (
-                  <TouchableOpacity style={styles.detailActionButton} onPress={() => Alert.alert('Open Offline', `${selectedItem.title} is ready offline.`)}>
+                  <TouchableOpacity style={styles.detailActionButton} onPress={() => openDownload(selectedItem)}>
                     <Eye size={18} color="#FFFFFF" />
                     <Text style={styles.detailActionText}>Open</Text>
                   </TouchableOpacity>

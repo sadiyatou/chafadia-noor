@@ -15,7 +15,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Notifications from 'expo-notifications';
+import Notifications from '../../utils/safeNotifications';
 
 import {
   BookOpen,
@@ -620,14 +620,7 @@ export default function HadithPage() {
   const [topic, setTopic] = useState('All');
   const [favorites, setFavorites] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const [dailyReminder, setDailyReminder] = useState(REMINDERS[0]);
-
-  useEffect(() => {
-    loadFavorites();
-    setDailyReminder(
-      REMINDERS[Math.floor(Math.random() * REMINDERS.length)]
-    );
-  }, []);
+  const [dailyReminder, setDailyReminder] = useState(() => REMINDERS[Math.floor(Math.random() * REMINDERS.length)]);
 
   const loadFavorites = async () => {
     try {
@@ -637,6 +630,10 @@ export default function HadithPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadFavorites();
+  }, []);
 
   const saveFavorites = async (items: string[]) => {
     await AsyncStorage.setItem(

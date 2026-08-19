@@ -16,7 +16,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Notifications from 'expo-notifications';
+import Notifications from '../../utils/safeNotifications';
 import * as Speech from 'expo-speech';
 
 import {
@@ -8519,14 +8519,6 @@ export default function AzkarDuaPage() {
   const [routinePlaying, setRoutinePlaying] = useState(false);
   const [nowReciting, setNowReciting] = useState('');
 
-  useEffect(() => {
-    loadSavedData();
-
-    return () => {
-      Speech.stop();
-    };
-  }, []);
-
   const loadSavedData = async () => {
     try {
       const fav = await AsyncStorage.getItem(STORAGE_FAVORITES);
@@ -8542,6 +8534,14 @@ export default function AzkarDuaPage() {
       if (reciter) setSelectedReciter(reciter);
     } catch {}
   };
+
+  useEffect(() => {
+    loadSavedData();
+
+    return () => {
+      Speech.stop();
+    };
+  }, []);
 
   const saveFavorites = async (items: string[]) => {
     setFavorites(items);

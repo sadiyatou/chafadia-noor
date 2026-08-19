@@ -394,6 +394,7 @@ export const followUser = async (
       doc(db, 'users', currentUserId),
       {
         following: arrayUnion(targetUserId),
+        followingCount: increment(1),
       }
     );
 
@@ -427,6 +428,7 @@ export const unfollowUser = async (
       doc(db, 'users', currentUserId),
       {
         following: arrayRemove(targetUserId),
+        followingCount: increment(-1),
       }
     );
 

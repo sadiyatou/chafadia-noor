@@ -10,11 +10,14 @@ import {
   query,
   where,
   orderBy,
+  limit,
   onSnapshot,
   serverTimestamp,
   arrayUnion,
   arrayRemove,
   increment,
+  deleteField,
+  writeBatch,
 } from 'firebase/firestore';
 
 import { db } from './firebaseConfig';
@@ -323,21 +326,19 @@ export const getChatById = async chatId => {
 export const markChatAsRead = async ({ chatId, userId }) => {
   try {
     const messagesRef = collection(db, 'chats', chatId, 'messages');
-    const snapshot = await getDocs(messagesRef);
+    const snapshot = await getDocs(query(messagesRef, orderBy('createdAt', 'desc'), limit(200)));
 
+    const batch = writeBatch(db);
     for (const item of snapshot.docs) {
       const data = item.data();
-
       if (!data.readBy?.includes(userId)) {
-        await updateDoc(item.ref, {
-          readBy: arrayUnion(userId),
-        });
+        batch.update(item.ref, { readBy: arrayUnion(userId) });
       }
     }
-
-    await updateDoc(doc(db, 'chats', chatId), {
+    batch.update(doc(db, 'chats', chatId), {
       [`unreadCounts.${userId}`]: 0,
     });
+    await batch.commit();
 
     return {
       success: true,
@@ -480,7 +481,7 @@ export const removeReaction = async ({
     await updateDoc(
       doc(db, 'chats', chatId, 'messages', messageId),
       {
-        [`reactions.${userId}`]: null,
+        [`reactions.${userId}`]: deleteField(),
         updatedAt: serverTimestamp(),
       }
     );
